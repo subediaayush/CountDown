@@ -1,11 +1,99 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="AppTheme.AppBar" parent="Theme.AppCompat">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AddTimerTheme" parent="Theme.AppCompat">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!--<item name="android:windowBackground">@color/colorPrimary</item>-->
+        <!--<item name="android:navigationBarColor">@color/colorPrimary</item>-->
+        <!--<item name="android:actionBarStyle">@color/colorAccent</item>-->
+    </style>
+
+    <style name="TimerListItemText">
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TimerListItemTime" parent="TimerListItemText">
+
+    </style>
+
+    <style name="TimerListItemUnit" parent="TimerListItemText"></style>
+
+    <style name="DatePickerDialog" parent="android:Theme.Material.Dialog">
+        <item name="android:datePickerStyle">@style/DatePicker</item>
+    </style>
+
+    <style name="DatePicker" parent="android:Widget.Material.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
+        <item name="android:calendarViewShown">false</item>im
+    </style>
+
+    <style name="TimePickerDialog" parent="android:Theme.Material.Dialog">
+        <item name="android:timePickerMode">@style/DateTimePicker</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="DateTimePicker">
+
+    </style>
+
+    <style name="AddTimerTheme.GroupHeader">
+        <item name="android:textSize">@dimen/dimen_group_header</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="AddTimerTheme.GroupContent" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:drawablePadding">@dimen/dimen_group_drawable_padding</item>
+        <item name="android:textSize">@dimen/dimen_group_content</item>
+        <item name="android:layout_height">@dimen/dimen_group_input_height</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="AddTimerTheme.GroupInput">
+        <item name="android:drawablePadding">@dimen/dimen_group_drawable_padding</item>
+        <item name="android:textSize">@dimen/dimen_group_input</item>
+        <item name="android:layout_height">@dimen/dimen_group_input_height</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="AddTimerTheme.Meta">
+        <item name="android:textSize">@dimen/dimen_meta_content</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
+    <style name="AddTimerTheme.GroupButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textSize">@dimen/dimen_group_header</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="AddTimerTheme.ActionButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
+    <color name="white">#FFFF</color>
+    <color name="black">#F000</color>
 
 </resources>

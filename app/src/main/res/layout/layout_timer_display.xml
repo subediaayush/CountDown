@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:baselineAligned="false">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.flyingbuff.countdown.AdjustableTextView
+            android:id="@+id/time_order_max"
+            style="@style/TimerListItemTime"
+            android:layout_width="@dimen/timer_time"
+            android:layout_height="@dimen/timer_time"
+            android:text="24" />
+
+        <com.flyingbuff.countdown.AdjustableTextView
+            style="@style/TimerListItemUnit"
+            android:id="@+id/unit_order_max"
+            android:layout_width="@dimen/timer_time"
+            android:layout_height="@dimen/timer_unit"
+            android:text="hours"
+            android:textAllCaps="true" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="10dp"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.flyingbuff.countdown.AdjustableTextView
+            android:id="@+id/time_order_mid"
+            style="@style/TimerListItemTime"
+            android:layout_width="@dimen/timer_time"
+            android:layout_height="@dimen/timer_time"
+            android:text="60" />
+
+        <com.flyingbuff.countdown.AdjustableTextView
+            style="@style/TimerListItemUnit"
+            android:id="@+id/unit_order_mid"
+            android:layout_width="@dimen/timer_time"
+            android:layout_height="@dimen/timer_unit"
+            android:text="min"
+            android:textAllCaps="true" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="10dp"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.flyingbuff.countdown.AdjustableTextView
+            android:id="@+id/time_order_min"
+            style="@style/TimerListItemTime"
+            android:layout_width="@dimen/timer_time"
+            android:layout_height="@dimen/timer_time"
+            android:text="60" />
+
+        <com.flyingbuff.countdown.AdjustableTextView
+            style="@style/TimerListItemUnit"
+            android:id="@+id/unit_order_min"
+            android:layout_width="@dimen/timer_time"
+            android:layout_height="@dimen/timer_unit"
+            android:text="sec"
+            android:textAllCaps="true" />
+
+    </LinearLayout>
+
+</LinearLayout>

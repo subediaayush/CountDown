@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/outside_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/AddTimerTheme"
+    android:animateLayoutChanges="true"
+    android:background="@color/colorPrimary"
+    android:dividerPadding="5dp"
+    android:gravity="bottom"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:paddingBottom="5dp"
+        app:title="Add Timer" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/group_time_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        style="@style/AddTimerTheme.GroupHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Remind me at" />
+
+                    <Button
+                        android:id="@+id/add_end_time"
+                        style="@style/AddTimerTheme.GroupContent"
+                        android:layout_width="match_parent"
+                        android:drawableStart="@drawable/ic_clock"
+                        android:text="@string/string_dummy_time" />
+
+                    <Button
+                        android:id="@+id/add_end_date"
+                        style="@style/AddTimerTheme.GroupContent"
+                        android:layout_width="match_parent"
+                        android:drawableStart="@drawable/ic_calendar"
+                        android:text="@string/string_dummy_date" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/group_timer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/AddTimerTheme.GroupHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Remind me after" />
+
+                    <Button
+                        android:id="@+id/add_end_timer"
+                        style="@style/AddTimerTheme.GroupContent"
+                        android:layout_width="wrap_content"
+                        android:drawableStart="@drawable/ic_timer"
+                        android:text="@string/string_dummy_timer" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/group_input_toggle"
+                    style="@style/AddTimerTheme.GroupButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_toggle_input" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/input_detail"
+                style="@style/AddTimerTheme.Meta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="2 hours later" />
+
+            <LinearLayout
+                android:id="@+id/group_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/AddTimerTheme.GroupHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Details" />
+
+                <EditText
+                    android:id="@+id/add_name"
+                    style="@style/AddTimerTheme.GroupInput"
+                    android:layout_width="match_parent"
+                    android:drawableStart="@drawable/ic_name"
+                    android:hint="@string/hint_name"
+                    android:imeOptions="actionDone"
+                    android:inputType="textShortMessage"
+                    android:maxLines="1" />
+
+                <Switch
+                    android:id="@+id/add_notify"
+                    style="@style/AddTimerTheme.GroupInput"
+                    android:layout_width="match_parent"
+                    android:drawableStart="@drawable/ic_notify"
+                    android:text="@string/hint_notify" />
+
+                <TextView
+                    android:id="@+id/add_tone"
+                    style="@style/AddTimerTheme.GroupInput"
+                    android:layout_width="match_parent"
+                    android:drawableStart="@drawable/ic_tone"
+                    android:text="@string/hint_tone" />
+
+                <Switch
+                    android:id="@+id/add_auto_delete"
+                    style="@style/AddTimerTheme.GroupInput"
+                    android:layout_width="match_parent"
+                    android:drawableStart="@drawable/ic_delete"
+                    android:text="@string/hint_delete_after_use" />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>
