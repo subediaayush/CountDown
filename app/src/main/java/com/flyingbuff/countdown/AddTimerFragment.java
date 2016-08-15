@@ -18,9 +18,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
@@ -40,9 +43,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.android.flexbox.FlexboxLayout;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+
+import java.util.ArrayList;
 
 /**
  * Created by Aayush on 8/9/2016.
@@ -62,6 +69,8 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
     TextView addTone;
     Button addTimer;
     Switch addAutoDelete;
+    View timerTagPlaceholder;
+    FlexboxLayout timerTagContaier;
 
     BottomSheetBehavior behavior;
 
@@ -101,7 +110,10 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
         addName = (EditText) contentView.findViewById(R.id.add_name);
         addNotify = (Switch) contentView.findViewById(R.id.add_notify);
         addTone = (TextView) contentView.findViewById(R.id.add_tone);
-        addAutoDelete = (Switch) contentView.findViewById(R.id.add_auto_delete);
+        addAutoDelete = (Switch) contentView.findViewById(R.id.add_auto_repeat);
+
+        timerTagPlaceholder = contentView.findViewById(R.id.add_tags_placeholder);
+        timerTagContaier = (FlexboxLayout) contentView.findViewById(R.id.add_tags_container);
 
         toggleInputGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,16 +263,30 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String obtainedText = v.getText().toString();
-                    if (obtainedText.length() > 0)
-                        args.putString(Countdown.KEY_TIMER_NAME, obtainedText);
-                    Log.i("Add Timer", "Editor action captured " + obtainedText);
                     v.clearFocus();
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     return true;
                 }
                 return false;
+            }
+        });
+
+        addName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String obtainedText = s.toString();
+                args.putString(Countdown.KEY_TIMER_NAME, obtainedText);
             }
         });
 
@@ -276,8 +302,11 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View v) {
 
+                Uri tone = args.getParcelable(Countdown.KEY_TIMER_TONE);
+
                 Intent toneChooser = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 toneChooser.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM);
+                toneChooser.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, tone);
 
                 startActivityForResult(toneChooser, Countdown.ACTIVITY_ACTION_RINGTONE);
                 // show chooser
@@ -288,6 +317,15 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 args.putBoolean(Countdown.KEY_TIMER_AUTO_DEL, isChecked);
+            }
+        });
+
+        contentView.findViewById(R.id.tags_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent searchIntent = new Intent(getContext(), SearchTagActivity.class);
+                searchIntent.putExtra(Countdown.KEY_TAG, args.getStringArrayList(Countdown.KEY_TIMER_TAG));
+                startActivityForResult(searchIntent, Countdown.ACTIVITY_ADD_TAGS);
             }
         });
 
@@ -318,14 +356,16 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
         Boolean notify = args.getBoolean(Countdown.KEY_TIMER_NOTIFY);
         Uri tone = args.getParcelable(Countdown.KEY_TIMER_TONE);
         Boolean autoDelete = args.getBoolean(Countdown.KEY_TIMER_AUTO_DEL);
+        ArrayList<String> tags = args.getStringArrayList(Countdown.KEY_TIMER_TAG);
 
         if (tone == null) tone = Uri.EMPTY;
+        if (tags == null) tags = new ArrayList<>();
 
         long endDate = DateTime.now().plus(end).getMillis();
 
-        Timer timer = new Timer(name, endDate, autoDelete, notify, !tone.equals(Uri.EMPTY));
+        Timer timer = new Timer(name, endDate, autoDelete, notify, notify && tone.equals(Uri.EMPTY));
 
-        if (onDismissListener != null) onDismissListener.onAddTimer(getDialog(), timer, tone);
+        if (onDismissListener != null) onDismissListener.onAddTimer(getDialog(), timer, tone, tags);
     }
 
     private void animateSaveButton() {
@@ -340,14 +380,30 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
         @Override
         public void onStateChanged(@NonNull View bottomSheet, int newState) {
             Log.i("AddTimerFragment", "State " + newState);
-            if (newState == BottomSheetBehavior.STATE_HIDDEN)
+            if (newState == BottomSheetBehavior.STATE_HIDDEN) {
                 dismiss();
+            } else if (newState == BottomSheetBehavior.STATE_COLLAPSED ||
+                    newState == BottomSheetBehavior.STATE_EXPANDED) {
+                if (onDismissListener != null)
+                    onDismissListener.onDialogStateChanged(getDialog(), true);
+            } else if (newState == BottomSheetBehavior.STATE_DRAGGING ||
+                    newState == BottomSheetBehavior.STATE_SETTLING) {
+                if (onDismissListener != null)
+                    onDismissListener.onDialogStateChanged(getDialog(), false);
+            }
+
         }
 
         @Override
         public void onSlide(@NonNull View bottomSheet, float slideOffset) {
         }
     };
+
+    @Override
+    public void show(FragmentManager manager, String tag) {
+        super.show(manager, tag);
+        if (onDismissListener != null) onDismissListener.onDialogStateChanged(getDialog(), false);
+    }
 
     private void hideSaveButton() {
         addTimer.animate().setDuration(100).setInterpolator(new AccelerateInterpolator())
@@ -447,6 +503,7 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
         addAutoDelete.setChecked(args.getBoolean(Countdown.KEY_TIMER_AUTO_DEL));
 
         updateRingtoneContainer();
+        updateTagContainer();
         refreshViews();
     }
 
@@ -477,6 +534,9 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
             if (notify)
                 args.putParcelable(Countdown.KEY_TIMER_TONE, Settings.System.DEFAULT_ALARM_ALERT_URI);
         }
+
+        if (!args.containsKey(Countdown.KEY_TIMER_TAG))
+            args.putStringArrayList(Countdown.KEY_TIMER_TAG, new ArrayList<String>());
 
         if (!args.containsKey(Countdown.KEY_TIMER_AUTO_DEL))
             args.putBoolean(Countdown.KEY_TIMER_AUTO_DEL, false);
@@ -555,7 +615,9 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
     public interface OnAddTimerDialogListener {
         void onDismiss(DialogInterface dialog);
 
-        void onAddTimer(DialogInterface dialog, Timer timer, Uri toneUri);
+        void onAddTimer(DialogInterface dialog, Timer timer, Uri toneUri, ArrayList<String> tags);
+
+        void onDialogStateChanged(DialogInterface dialog, boolean settled);
     }
 
     @Override
@@ -574,10 +636,42 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
                 Ringtone ringtone = RingtoneManager.getRingtone(getContext(), uri);
                 String title = ringtone.getTitle(getContext());
                 Log.i("AddTimerFragment", title);
-                updateRingtoneContainer();
             } else {
                 args.putParcelable(Countdown.KEY_TIMER_TONE, Uri.EMPTY);
             }
+            updateRingtoneContainer();
+        }
+        if (requestCode == Countdown.ACTIVITY_ADD_TAGS && resultCode == Activity.RESULT_OK) {
+            Bundle data = intent.getExtras();
+            ArrayList<String> tags = data.getStringArrayList(Countdown.KEY_TAG);
+
+            if (tags != null) args.putStringArrayList(Countdown.KEY_TIMER_TAG, tags);
+            updateTagContainer();
+        }
+    }
+
+    private void updateTagContainer() {
+        ArrayList<String> tags = args.getStringArrayList(Countdown.KEY_TIMER_TAG);
+        Context context = getContext();
+
+        if (tags == null) tags = new ArrayList<>();
+
+        if (tags.isEmpty()) timerTagPlaceholder.setVisibility(View.VISIBLE);
+        else timerTagPlaceholder.setVisibility(View.INVISIBLE);
+
+        int totalDisplayedTags = timerTagContaier.getChildCount();
+        for (int i = totalDisplayedTags - 1; i >= 0; i--) {
+            View child = timerTagContaier.getChildAt(i);
+            String childTag = child.getTag().toString();
+            if (!tags.contains(childTag)) timerTagContaier.removeView(child);
+        }
+
+        for (String tag : tags) {
+            if (timerTagContaier.findViewWithTag(tag) != null) continue;
+            TextView tagView = new TextView(context, null, R.style.Timer_Tag);
+            tagView.setTag(tag);
+            tagView.setText(tag);
+            timerTagContaier.addView(tagView);
         }
     }
 

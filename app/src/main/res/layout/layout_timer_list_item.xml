@@ -1,60 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    app:cardElevation="1dp">
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackgroundBorderless">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
 
         <LinearLayout
-            android:id="@+id/timer_item_start"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
 
-            <ImageButton
-                android:layout_width="@dimen/size_timer_button"
-                android:layout_height="@dimen/size_timer_button" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp">
 
-            <ImageButton
-                android:layout_width="@dimen/size_timer_button"
-                android:layout_height="@dimen/size_timer_button" />
+                <ProgressBar
+                    android:id="@+id/timer_progress"
+                    style="@style/Timer.Progress"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:progressDrawable="@drawable/circular_progress_bar" />
 
+                <ToggleButton
+                    android:id="@+id/timer_pause_toggle"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="0dp"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:padding="0dp" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/timer_name"
+                    style="@style/Timer.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_dummy_name" />
+
+                <TextView
+                    android:id="@+id/timer_remaining_time"
+                    style="@style/Timer.Time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/string_dummy_timer" />
+
+                <TextView
+                    android:id="@+id/timer_end_datetime"
+                    style="@style/Timer.Detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/string_dummy_timer_detail" />
+            </LinearLayout>
         </LinearLayout>
 
-        <include
-            layout="@layout/layout_timer_display"
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_weight="1" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@color/gray" />
 
         <LinearLayout
-            android:id="@+id/timer_item_end"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:gravity="center_vertical">
 
-            <ImageButton
-                android:layout_width="@dimen/size_timer_button"
-                android:layout_height="@dimen/size_timer_button" />
+            <HorizontalScrollView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:overScrollMode="never"
+                android:requiresFadingEdge="horizontal"
+                android:scrollbars="none">
 
-            <ImageButton
-                android:layout_width="@dimen/size_timer_button"
-                android:layout_height="@dimen/size_timer_button" />
+                <LinearLayout
+                    android:id="@+id/timer_tag_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:divider="@drawable/transparent_divider"
+                    android:orientation="horizontal"
+                    android:showDividers="middle">
 
-            <ImageButton
-                android:layout_width="@dimen/size_timer_button"
-                android:layout_height="@dimen/size_timer_button" />
+                    <TextView
+                        style="@style/Timer.Tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" tag" />
 
-            <ImageButton
-                android:layout_width="@dimen/size_timer_button"
-                android:layout_height="@dimen/size_timer_button" />
+                    <TextView
+                        style="@style/Timer.Tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tag"
+                        android:text="a very long tag" />
 
+                    <TextView
+                        style="@style/Timer.Tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tag"
+                        android:text="a very long tag" />
+
+                    <TextView
+                        style="@style/Timer.Tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/tag"
+                        android:text="a very long tag" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:divider="@drawable/transparent_divider"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:showDividers="middle">
+
+                <ImageView
+                    android:id="@+id/timer_indicator_nofity"
+                    style="@style/Timer.Icons"
+                    android:src="@drawable/ic_notify_enabled" />
+
+                <ImageView
+                    android:id="@+id/timer_indicator_silent"
+                    style="@style/Timer.Icons"
+                    android:src="@drawable/ic_tone_enabled" />
+
+                <ImageView
+                    android:id="@+id/timer_indicator_repeat"
+                    style="@style/Timer.Icons"
+                    android:src="@drawable/ic_delete_enabled" />
+            </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
+
 </android.support.v7.widget.CardView>

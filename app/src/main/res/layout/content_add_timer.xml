@@ -4,12 +4,12 @@
     android:id="@+id/outside_dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:theme="@style/AddTimerTheme"
     android:animateLayoutChanges="true"
     android:background="@color/colorPrimary"
     android:dividerPadding="5dp"
     android:gravity="bottom"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/AddTimerTheme">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -52,14 +52,14 @@
                     <Button
                         android:id="@+id/add_end_time"
                         style="@style/AddTimerTheme.GroupContent"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:drawableStart="@drawable/ic_clock"
                         android:text="@string/string_dummy_time" />
 
                     <Button
                         android:id="@+id/add_end_date"
                         style="@style/AddTimerTheme.GroupContent"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:drawableStart="@drawable/ic_calendar"
                         android:text="@string/string_dummy_date" />
                 </LinearLayout>
@@ -84,23 +84,29 @@
                         android:text="@string/string_dummy_timer" />
                 </LinearLayout>
 
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <ImageButton
                     android:id="@+id/group_input_toggle"
                     style="@style/AddTimerTheme.GroupButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:adjustViewBounds="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_toggle_input" />
-            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/input_detail"
-                style="@style/AddTimerTheme.Meta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:text="2 hours later" />
+                <TextView
+                    android:id="@+id/input_detail"
+                    style="@style/AddTimerTheme.Meta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="2 hours later" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/group_details"
@@ -128,6 +134,7 @@
                     android:id="@+id/add_notify"
                     style="@style/AddTimerTheme.GroupInput"
                     android:layout_width="match_parent"
+                    android:background="?attr/selectableItemBackground"
                     android:drawableStart="@drawable/ic_notify"
                     android:text="@string/hint_notify" />
 
@@ -135,15 +142,36 @@
                     android:id="@+id/add_tone"
                     style="@style/AddTimerTheme.GroupInput"
                     android:layout_width="match_parent"
+                    android:background="?attr/selectableItemBackground"
                     android:drawableStart="@drawable/ic_tone"
                     android:text="@string/hint_tone" />
 
                 <Switch
-                    android:id="@+id/add_auto_delete"
+                    android:id="@+id/add_auto_repeat"
                     style="@style/AddTimerTheme.GroupInput"
                     android:layout_width="match_parent"
+                    android:background="?attr/selectableItemBackground"
                     android:drawableStart="@drawable/ic_delete"
                     android:text="@string/hint_delete_after_use" />
+
+                <RelativeLayout
+                    android:id="@+id/tags_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:id="@+id/add_tags_placeholder"
+                        style="@style/AddTimerTheme.GroupInput"
+                        android:layout_width="match_parent"
+                        android:enabled="false"
+                        android:text="No tags assigned" />
+
+                    <com.google.android.flexbox.FlexboxLayout
+                        android:id="@+id/add_tags_container"
+                        android:layout_width="match_parent"
+                        style="@style/AddTimerTheme.GroupInput" />
+                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

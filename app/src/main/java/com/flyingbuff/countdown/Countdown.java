@@ -39,6 +39,7 @@ public class Countdown extends Application {
     public static final String KEY_TIMER_NOTIFY = "timer_notify";
     public static final String KEY_TIMER_AUTO_DEL = "timer_auto_delete";
     public static final int ACTIVITY_ACTION_RINGTONE = 1000;
+    public static final int ACTIVITY_ADD_TAGS = 1001;
     public static final String KEY_TIMER_TONE = "timer_tone";
 
     public static final long SECONDS_IN_HOUR = 3600;
@@ -47,6 +48,13 @@ public class Countdown extends Application {
     public static final String COLUMN_TIMER_ID = "timer";
     public static final String COLUMN_URI = "uri";
     public static final String KEY_TIMER_ADD = "timer_add";
+    public static final String TABLE_TAGS = "tags";
+    public static final String COLUMN_TAG = "tag";
+    public static final String TABLE_TAG_REFERENCE = "tag_reference";
+    public static final String KEY_TAG = "tag";
+    public static final String KEY_SINGLE_TAG = "single_tag";
+    public static final String KEY_TIMER_TAG = "timer_tag";
+    public static final String COLUMN_RESUMED_AT = "resumed_at";
 
     @Override
     public void onCreate() {

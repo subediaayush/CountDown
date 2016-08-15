@@ -1,17 +1,18 @@
 package com.flyingbuff.countdown;
 
 import android.content.ContentValues;
-import android.support.annotation.NonNull;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
+import java.util.Comparator;
 import java.util.Locale;
 
 /**
  * Created by Aayush on 8/7/2016.
  */
-public class Timer extends TimerBase implements Comparable {
+public class Timer extends TimerBase {
 
     public static final int MILLI = 0,
             SECOND = 1,
@@ -23,25 +24,24 @@ public class Timer extends TimerBase implements Comparable {
 
     public static final String[] TIME_UNIT = new String[]{"milli", "sec", "min", "hour", "day", "month", "year"};
 
-    int id;
+    private int id;
 
-    String name;
+    private String name;
 
-    final long start;
-    final long end;
+    private final long start;
+    private final long end;
 
-    long paused_at;
-    long remaining;
-    long elapsed;
-    long duration;
-    long time_out;
+    private long paused_at;
+    private long resumed_at;
 
-    boolean single_use;
-    boolean paused;
-    boolean notify;
-    boolean silent;
+    private long duration;
+    private long elapsed;
 
-    int tone;
+    private boolean repeat;
+    private boolean notify;
+    private boolean silent;
+
+    private boolean paused;
 
     public Timer(
             int id,
@@ -49,30 +49,26 @@ public class Timer extends TimerBase implements Comparable {
             long start,
             long end,
             long paused_at,
+            long resumed_at,
             long duration,
-            long remaining,
             long elapsed,
-            long time_out,
-            boolean single_use,
-            boolean paused,
+            boolean repeat,
             boolean notify,
             boolean silent,
-            int tone
+            boolean paused
     ) {
         this.id = id;
         this.name = name;
         this.start = start;
         this.end = end;
         this.paused_at = paused_at;
-        this.duration = Countdown.normalize(duration);
-        this.remaining = Countdown.normalize(remaining);
-        this.elapsed = Countdown.normalize(elapsed);
-        this.time_out = Countdown.normalize(time_out);
-        this.single_use = single_use;
-        this.paused = paused;
+        this.resumed_at = resumed_at;
+        this.duration = duration;
+        this.elapsed = elapsed;
+        this.repeat = repeat;
         this.notify = notify;
         this.silent = silent;
-        this.tone = tone;
+        this.paused = paused;
     }
 
     public Timer(long end) {
@@ -83,37 +79,87 @@ public class Timer extends TimerBase implements Comparable {
         this(name, end, false);
     }
 
-    public Timer(long end, boolean single_use) {
-        this("", end, single_use);
+    public Timer(long end, boolean repeat) {
+        this("", end, repeat);
     }
 
-    public Timer(String name, long end, boolean single_use) {
-        this(name, end, single_use, true, false);
+    public Timer(String name, long end, boolean repeat) {
+        this(name, end, repeat, true, false);
     }
 
-    public Timer(String name, long end, boolean single_use, boolean notify, boolean silent) {
-        this(name, DateTime.now().getMillis(), end, single_use, notify, silent);
+    public Timer(String name, long end, boolean repeat, boolean notify, boolean silent) {
+        this(name, DateTime.now().getMillis(), end, repeat, notify, silent);
     }
 
-    public Timer(String name, long start, long end, boolean single_use, boolean notify, boolean silent) {
+    public Timer(String name, long start, long end, boolean repeat, boolean notify, boolean silent) {
         start = Countdown.normalize(start);
         end = Countdown.normalize(end);
 
         this.name = name;
+
         this.start = start;
         this.end = end;
-        this.single_use = single_use;
+        this.duration = end - start;
+
+        this.elapsed = 0;
+
+        this.paused_at = start;
+        this.resumed_at = start;
+
+        this.id = -1;
+        this.repeat = repeat;
         this.notify = notify;
         this.silent = silent;
 
-        this.id = -1;
-        this.paused_at = end;
-        this.remaining = end - start;
-        this.elapsed = 0;
-        this.duration = end - start;
-        this.time_out = end;
-
         this.paused = false;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public long getStart() {
+        return start;
+    }
+
+    public long getEnd() {
+        return end;
+    }
+
+    public long getPausedAt() {
+        return paused_at;
+    }
+
+    public long getResumedAt() {
+        return resumed_at;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public long getElapsed() {
+        return elapsed;
+    }
+
+    public boolean isRepeat() {
+        return repeat;
+    }
+
+    public boolean isNotify() {
+        return notify;
+    }
+
+    public boolean isSilent() {
+        return silent;
+    }
+
+    public boolean isPaused() {
+        return paused;
     }
 
     public static int getOrder(long duration) {
@@ -170,133 +216,79 @@ public class Timer extends TimerBase implements Comparable {
         return output.split(" ");
     }
 
+    public String humanize() {
+        return humanize(getRemainingTime());
+    }
+
+    public static String humanize(long duration) {
+        String[] durationString = Timer.formatDuration(duration);
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 1; i < durationString.length; i += 2) {
+            if (!"00".equals(durationString[i])) {
+                builder.append(durationString[i]).append(" ");
+                builder.append(durationString[i + 1]).append(" ");
+            }
+        }
+        return builder.toString();
+    }
+
+    public String humanizeEndDateTime(String prefix) {
+        DateTime endDateTime = DateTime.now().plus(getRemainingTime());
+
+        LocalDate endDate = endDateTime.toLocalDate();
+        LocalDate today = LocalDate.now();
+
+        StringBuilder summary = new StringBuilder();
+
+        summary.append(prefix);
+        summary.append(" ");
+        summary.append(endDateTime.toString("hh:mm a"));
+        if (endDate.isAfter(today.plusDays(1))) {
+            summary.append(", ");
+            if (endDate.isAfter(today.plusDays(5)))
+                summary.append(endDate.toString("dd MMM"));
+            else
+                summary.append(endDate.toString("EEEE"));
+            if (endDate.getYear() != today.getYear())
+                summary.append(", ")
+                        .append(endDate.toString("yyyy"));
+        } else if (endDate.isAfter(today))
+            summary.append(" tommorow");
+
+        return summary.toString();
+    }
+
+    public String humanizeEndDateTime() {
+        return humanizeEndDateTime("at");
+    }
+
+    public long getElapsedTime() {
+        if (paused_at <= resumed_at)
+            return elapsed + DateTime.now().getMillis() - resumed_at;
+        else
+            return elapsed;
+    }
+
     public long getRemainingTime() {
-        return time_out - DateTime.now().getMillis();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public long getStart() {
-        return start;
-    }
-
-    public long getEnd() {
-        return end;
-    }
-
-    public long getPausedAt() {
-        return paused_at;
-    }
-
-    public void setPausedAt(long stopped_at) {
-        this.paused_at = stopped_at;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
+        return duration - getElapsedTime();
     }
 
     public long getTimeOut() {
-        return time_out;
-    }
-
-    public void setTimeOut(long time_out) {
-        this.time_out = time_out;
-    }
-
-    public long getRemaining() {
-        return remaining;
-    }
-
-    public void setRemaining(long remaining) {
-        this.remaining = remaining;
-    }
-
-    public boolean isSingleUse() {
-        return single_use;
-    }
-
-    public void setSingleUse(boolean singleUse) {
-        this.single_use = single_use;
-    }
-
-    public boolean isPaused() {
-        return paused;
-    }
-
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-    }
-
-    public boolean isNotify() {
-        return notify;
-    }
-
-    public void setNotify(boolean notify) {
-        this.notify = notify;
-    }
-
-    public boolean isSilent() {
-        return silent;
-    }
-
-    public void setSilent(boolean silent) {
-        this.silent = silent;
-    }
-
-    public int getTone() {
-        return tone;
-    }
-
-    public void setTone(int tone) {
-        this.tone = tone;
-    }
-
-    @Override
-    public int compareTo(@NonNull Object another) {
-        if (another instanceof Timer)
-            return (int) (time_out - ((Timer) another).time_out);
-        return 0;
-    }
-
-    public long getElapsed() {
-        return elapsed;
-    }
-
-    public void setElapsed(long elapsed) {
-        this.elapsed = elapsed;
+        return DateTime.now().getMillis() + getRemainingTime();
     }
 
     @Override
     protected void pauseTimer() {
         super.pauseTimer();
 
-        long now = DateTime.now().getMillis();
-        remaining = paused_at - now;
-        elapsed += remaining;
+        long now = Countdown.normalize(DateTime.now().getMillis());
+
+        elapsed = getElapsedTime();
         paused_at = now;
         paused = true;
 
         ContentValues args = new ContentValues();
-        args.put(Countdown.COLUMN_REMAINING, remaining);
         args.put(Countdown.COLUMN_ELAPSED, elapsed);
         args.put(Countdown.COLUMN_PAUSED_AT, paused_at);
         args.put(Countdown.COLUMN_PAUSED, paused);
@@ -308,11 +300,13 @@ public class Timer extends TimerBase implements Comparable {
     protected void resumeTimer() {
         super.resumeTimer();
 
-        time_out = paused_at + remaining;
+        long now = Countdown.normalize(DateTime.now().getMillis());
+
         paused = false;
+        resumed_at = now;
 
         ContentValues args = new ContentValues();
-        args.put(Countdown.COLUMN_TIMEOUT, time_out);
+        args.put(Countdown.COLUMN_RESUMED_AT, resumed_at);
         args.put(Countdown.COLUMN_PAUSED, paused);
 
         getDatabaseHelper().editTimer(id, args);
@@ -322,12 +316,15 @@ public class Timer extends TimerBase implements Comparable {
     protected void resetTimer() {
         super.resetTimer();
 
-        long now = DateTime.now().getMillis();
-        remaining = duration;
+        long now = Countdown.normalize(DateTime.now().getMillis());
+
+        elapsed = 0;
         paused_at = now;
+        resumed_at = now;
 
         ContentValues args = new ContentValues();
-        args.put(Countdown.COLUMN_REMAINING, remaining);
+        args.put(Countdown.COLUMN_ELAPSED, elapsed);
+        args.put(Countdown.COLUMN_RESUMED_AT, resumed_at);
         args.put(Countdown.COLUMN_PAUSED_AT, paused_at);
 
         getDatabaseHelper().editTimer(id, args);
@@ -345,5 +342,33 @@ public class Timer extends TimerBase implements Comparable {
     @Override
     protected void timeOut() {
         super.timeOut();
+    }
+
+    public static final Comparator<Timer> REMAINING_TIME_COMPARATOR = new Comparator<Timer>() {
+        @Override
+        public int compare(Timer lhs, Timer rhs) {
+            return (int) (lhs.getTimeOut() - rhs.getTimeOut());
+        }
+    };
+    public static final Comparator<Timer> ALPHABETICAL_COMPARATOR = new Comparator<Timer>() {
+        @Override
+        public int compare(Timer lhs, Timer rhs) {
+            return lhs.getName().compareTo(rhs.getName());
+        }
+    };
+
+    public static final Comparator<Timer> CREATION_DATE_COMPARATOR = new Comparator<Timer>() {
+        @Override
+        public int compare(Timer lhs, Timer rhs) {
+            return (int) (lhs.getStart() - rhs.getStart());
+        }
+    };
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public float getProgress() {
+        return getElapsedTime() / (float) getDuration();
     }
 }

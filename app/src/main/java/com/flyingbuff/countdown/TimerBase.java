@@ -3,8 +3,6 @@ package com.flyingbuff.countdown;
 import android.content.Context;
 import android.util.Log;
 
-import org.joda.time.DateTime;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -22,24 +20,32 @@ public class TimerBase {
         @Override
         public void OnTimeOut(Timer timer) {
             runningTimers.remove(timer);
+            validateList();
+
             if (timer.simpleTimerListener != null) timer.simpleTimerListener.OnTimeOut();
         }
 
         @Override
         public void OnReset(Timer timer) {
             runningTimers.add(timer);
+            validateList();
+
             if (timer.simpleTimerListener != null) timer.simpleTimerListener.OnReset();
         }
 
         @Override
         public void OnPaused(Timer timer) {
             runningTimers.remove(timer);
+            validateList();
+
             if (timer.simpleTimerListener != null) timer.simpleTimerListener.OnPaused();
         }
 
         @Override
         public void OnResumed(Timer timer) {
             runningTimers.add(timer);
+            validateList();
+
             if (timer.simpleTimerListener != null) timer.simpleTimerListener.OnResumed();
         }
     };
@@ -52,7 +58,10 @@ public class TimerBase {
     }
 
     public TimerBase() {
-        runningTimers.add((Timer) this);
+        Timer currentTimer = (Timer) this;
+        if (!runningTimers.contains(currentTimer))
+            runningTimers.add(currentTimer);
+
         validateList();
         Log.i("Timerbase", "New timer created");
     }
@@ -66,21 +75,13 @@ public class TimerBase {
     }
 
     private static void validateList() {
-        Timer maxTimer = Collections.max(runningTimers);
-        Timer minTimer = Collections.min(runningTimers);
+        Timer minTimer = Collections.min(runningTimers, Timer.REMAINING_TIME_COMPARATOR);
 
         long smallestTimer = minTimer.getRemainingTime();
-        long largestTimer = maxTimer.getRemainingTime();
-        long commonSteps = gcd(runningTimers);
+
+
     }
 
-    private void monitorRunningTimers(ArrayList<Timer> timers) {
-        ArrayList<Timer> newList = new ArrayList<>();
-        long currentTime = DateTime.now().getMillis();
-        for (Timer timer : timers) {
-            if (timer.getRemaining() <= 0) timer.timeOut();
-        }
-    }
 
     protected void saveTimer() {
     }

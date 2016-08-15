@@ -4,8 +4,11 @@
     <string name="string_dummy_time">12:13 pm</string>
     <string name="string_dummy_date">Jan 1, 2016</string>
     <string name="hint_name">Name</string>
-    <string name="string_dummy_timer">12 hrs 14 min 12 sec</string>
+    <string name="string_dummy_timer">10 days, 14 hours remaining</string>
     <string name="hint_delete_after_use">Automatically delete</string>
     <string name="hint_notify">Notify</string>
     <string name="hint_tone">Alert tone not set</string>
+    <string name="string_dummy_name">Name of timer</string>
+    <string name="string_dummy_timer_detail">ends on 14 Apr, 2015</string>
+    <string name="action_search">Search</string>
 </resources>

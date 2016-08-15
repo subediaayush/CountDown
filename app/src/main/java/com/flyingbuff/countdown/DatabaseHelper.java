@@ -44,26 +44,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         query = String.format(
                 "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "%s VARCHAR, %s INTEGER, %s INTEGER, %s INTEGER, %s INTEGER, %s INTEGER, " +
-                        "%s INTEGER, %s INTEGER, %s INTEGER, %s INTEGER, %s INTEGER, %s INTEGER, %s INTEGER);",
+                        "%s VARCHAR, %s INTEGER, %s INTEGER, %s INTEGER, %s INTEGER, " +
+                        "%s INTEGER, %s INTEGER, %s INTEGER, %s INTEGER, %s INTEGER, %s INTEGER);",
                 Countdown.TABLE_TIMER,
                 Countdown.COLUMN_ID,
                 Countdown.COLUMN_NAME,
                 Countdown.COLUMN_INIT,
                 Countdown.COLUMN_END,
-                Countdown.COLUMN_DURATION,
                 Countdown.COLUMN_PAUSED_AT,
-                Countdown.COLUMN_REMAINING,
+                Countdown.COLUMN_RESUMED_AT,
+                Countdown.COLUMN_DURATION,
                 Countdown.COLUMN_ELAPSED,
-                Countdown.COLUMN_TIMEOUT,
                 Countdown.COLUMN_SINGLE_USE,
-                Countdown.COLUMN_PAUSED,
                 Countdown.COLUMN_NOTIFY,
                 Countdown.COLUMN_SILENT,
-                Countdown.COLUMN_TONE
+                Countdown.COLUMN_PAUSED
         );
-        db.execSQL(query);
         Log.i("Query", query);
+        db.execSQL(query);
 
         query = String.format(
                 "CREATE TABLE %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -74,8 +72,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Countdown.COLUMN_URI
         );
 
-        db.execSQL(query);
         Log.i("Query", query);
+        db.execSQL(query);
+
+        query = String.format(
+                "CREATE TABLE %s (%s VARCHAR PRIMARY KEY);",
+                Countdown.TABLE_TAGS,
+                Countdown.COLUMN_TAG
+        );
+
+        Log.i("Query", query);
+        db.execSQL(query);
+
+        query = String.format(
+                "CREATE TABLE %s (%s VARCHAR, %s INTEGER);",
+                Countdown.TABLE_TAG_REFERENCE,
+                Countdown.COLUMN_TAG,
+                Countdown.COLUMN_TIMER_ID
+        );
+
+        Log.i("Query", query);
+        db.execSQL(query);
     }
 
     @Override
@@ -101,15 +118,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(Countdown.COLUMN_NAME, timer.getName());
         values.put(Countdown.COLUMN_INIT, timer.getStart());
         values.put(Countdown.COLUMN_END, timer.getEnd());
-        values.put(Countdown.COLUMN_DURATION, timer.getDuration());
         values.put(Countdown.COLUMN_PAUSED_AT, timer.getPausedAt());
-        values.put(Countdown.COLUMN_REMAINING, timer.getRemaining());
+        values.put(Countdown.COLUMN_RESUMED_AT, timer.getResumedAt());
+        values.put(Countdown.COLUMN_DURATION, timer.getDuration());
         values.put(Countdown.COLUMN_ELAPSED, timer.getElapsed());
-        values.put(Countdown.COLUMN_TIMEOUT, timer.getTimeOut());
-        values.put(Countdown.COLUMN_SINGLE_USE, timer.isSingleUse());
-        values.put(Countdown.COLUMN_PAUSED, timer.isPaused());
+        values.put(Countdown.COLUMN_SINGLE_USE, timer.isRepeat());
         values.put(Countdown.COLUMN_NOTIFY, timer.isNotify());
         values.put(Countdown.COLUMN_SILENT, timer.isSilent());
+        values.put(Countdown.COLUMN_PAUSED, timer.isPaused());
 
         int row_id = -1;
         try (SQLiteDatabase db = getWritableDatabase()) {
@@ -138,7 +154,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     Countdown.COLUMN_ID + " = ?",
                     new String[]{String.valueOf(timerId)}
             );
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e("Database Helper", "Could not update timer " + timerId, e);
         }
         return rowCount;
@@ -166,19 +182,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Long init = c.getLong(c.getColumnIndex(Countdown.COLUMN_INIT));
             Long end = c.getLong(c.getColumnIndex(Countdown.COLUMN_END));
             Long paused_at = c.getLong(c.getColumnIndex(Countdown.COLUMN_PAUSED_AT));
-            Long remaining = c.getLong(c.getColumnIndex(Countdown.COLUMN_REMAINING));
-            Long elapsed = c.getLong(c.getColumnIndex(Countdown.COLUMN_ELAPSED));
+            Long resumed_at = c.getLong(c.getColumnIndex(Countdown.COLUMN_RESUMED_AT));
             Long duration = c.getLong(c.getColumnIndex(Countdown.COLUMN_DURATION));
-            Long timeout = c.getLong(c.getColumnIndex(Countdown.COLUMN_TIMEOUT));
+            Long elapsed = c.getLong(c.getColumnIndex(Countdown.COLUMN_ELAPSED));
             Boolean single_use = c.getInt(c.getColumnIndex(Countdown.COLUMN_SINGLE_USE)) == 1;
-            Boolean paused = c.getInt(c.getColumnIndex(Countdown.COLUMN_PAUSED)) == 1;
             Boolean notify = c.getInt(c.getColumnIndex(Countdown.COLUMN_NOTIFY)) == 1;
             Boolean silent = c.getInt(c.getColumnIndex(Countdown.COLUMN_SILENT)) == 1;
-            Integer toneId = c.getInt(c.getColumnIndex(Countdown.COLUMN_TONE));
+            Boolean paused = c.getInt(c.getColumnIndex(Countdown.COLUMN_PAUSED)) == 1;
 
             Log.i("DatabaseHelper", "Retrieved 1 timer");
-            timer = new Timer(id, name, init, end, paused_at, duration,
-                    remaining, elapsed, timeout, single_use, paused, notify, silent, toneId);
+            timer = new Timer(id, name, init, end, paused_at, resumed_at, duration,
+                    elapsed, single_use, notify, silent, paused);
         } catch (SQLiteException e) {
             Log.e("DatabaseHelper", "Error while retrieving timer", e);
         }
@@ -208,18 +222,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 Long init = c.getLong(c.getColumnIndex(Countdown.COLUMN_INIT));
                 Long end = c.getLong(c.getColumnIndex(Countdown.COLUMN_END));
                 Long paused_at = c.getLong(c.getColumnIndex(Countdown.COLUMN_PAUSED_AT));
-                Long remaining = c.getLong(c.getColumnIndex(Countdown.COLUMN_REMAINING));
-                Long elapsed = c.getLong(c.getColumnIndex(Countdown.COLUMN_ELAPSED));
+                Long resumed_at = c.getLong(c.getColumnIndex(Countdown.COLUMN_RESUMED_AT));
                 Long duration = c.getLong(c.getColumnIndex(Countdown.COLUMN_DURATION));
-                Long timeout = c.getLong(c.getColumnIndex(Countdown.COLUMN_TIMEOUT));
+                Long elapsed = c.getLong(c.getColumnIndex(Countdown.COLUMN_ELAPSED));
                 Boolean single_use = c.getInt(c.getColumnIndex(Countdown.COLUMN_SINGLE_USE)) == 1;
-                Boolean paused = c.getInt(c.getColumnIndex(Countdown.COLUMN_PAUSED)) == 1;
                 Boolean notify = c.getInt(c.getColumnIndex(Countdown.COLUMN_NOTIFY)) == 1;
                 Boolean silent = c.getInt(c.getColumnIndex(Countdown.COLUMN_SILENT)) == 1;
-                Integer toneId = c.getInt(c.getColumnIndex(Countdown.COLUMN_TONE));
+                Boolean paused = c.getInt(c.getColumnIndex(Countdown.COLUMN_PAUSED)) == 1;
 
-                timers.add(new Timer(id, name, init, end, paused_at, duration,
-                        remaining, elapsed, timeout, single_use, paused, notify, silent, toneId));
+                Log.i("DatabaseHelper", "Retrieved 1 timer");
+
+                timers.add(new Timer(id, name, init, end, paused_at, resumed_at, duration,
+                        elapsed, single_use, notify, silent, paused));
+
+                c.moveToNext();
+            } catch (SQLiteException e) {
+                Log.e("DatabaseHelper", "Error while loading timer", e);
+            }
+        }
+        c.close();
+        db.close();
+        return timers;
+    }
+
+    // Load all timers
+    public ArrayList<Timer> loadTimer(String tag) {
+        String Query = String.format(Locale.getDefault(),
+                "SELECT * FROM %s JOIN %s WHERE %s = %s;",
+                Countdown.TABLE_TIMER,
+                Countdown.TABLE_TAG_REFERENCE,
+                Countdown.COLUMN_ID,
+                Countdown.COLUMN_TIMER_ID
+        );
+
+        Log.i("Query", Query);
+
+        Timer timer = null;
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(Query, null);
+
+        c.moveToFirst();
+        ArrayList<Timer> timers = new ArrayList<>();
+        while (!c.isAfterLast()) {
+            try {
+                Integer id = c.getInt(c.getColumnIndex(Countdown.COLUMN_ID));
+                String name = c.getString(c.getColumnIndex(Countdown.COLUMN_NAME));
+                Long init = c.getLong(c.getColumnIndex(Countdown.COLUMN_INIT));
+                Long end = c.getLong(c.getColumnIndex(Countdown.COLUMN_END));
+                Long paused_at = c.getLong(c.getColumnIndex(Countdown.COLUMN_PAUSED_AT));
+                Long resumed_at = c.getLong(c.getColumnIndex(Countdown.COLUMN_RESUMED_AT));
+                Long duration = c.getLong(c.getColumnIndex(Countdown.COLUMN_DURATION));
+                Long elapsed = c.getLong(c.getColumnIndex(Countdown.COLUMN_ELAPSED));
+                Boolean single_use = c.getInt(c.getColumnIndex(Countdown.COLUMN_SINGLE_USE)) == 1;
+                Boolean notify = c.getInt(c.getColumnIndex(Countdown.COLUMN_NOTIFY)) == 1;
+                Boolean silent = c.getInt(c.getColumnIndex(Countdown.COLUMN_SILENT)) == 1;
+                Boolean paused = c.getInt(c.getColumnIndex(Countdown.COLUMN_PAUSED)) == 1;
+
+                Log.i("DatabaseHelper", "Retrieved 1 timer");
+
+                timers.add(new Timer(id, name, init, end, paused_at, resumed_at, duration,
+                        elapsed, single_use, notify, silent, paused));
 
                 c.moveToNext();
             } catch (SQLiteException e) {
@@ -248,6 +311,75 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public int saveTag(String tag) {
+        ContentValues arg = new ContentValues();
+        arg.put(Countdown.COLUMN_TAG, tag.trim().toLowerCase());
+
+        int row;
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            row = (int) db.insertWithOnConflict(Countdown.TABLE_TAGS, null, arg, SQLiteDatabase.CONFLICT_IGNORE);
+        }
+        return row;
+    }
+
+    public ArrayList<String> loadTags() {
+        String query = String.format(
+                "SELECT %s FROM %s;",
+                Countdown.COLUMN_TAG,
+                Countdown.TABLE_TAGS
+        );
+        Log.i("Query", query);
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+
+        c.moveToFirst();
+        ArrayList<String> tags = new ArrayList<>();
+
+        while (!c.isAfterLast()) {
+            try {
+                tags.add(c.getString(c.getColumnIndex(Countdown.COLUMN_TAG)));
+                c.moveToNext();
+            } catch (SQLiteException e) {
+                Log.e("DatabaseHelper", "Error while loading tags", e);
+            }
+        }
+        c.close();
+        db.close();
+
+        return tags;
+    }
+
+    public ArrayList<String> loadTags(Timer timer) {
+        String query = String.format(Locale.getDefault(),
+                "SELECT %s FROM %s WHERE %s = %d;",
+                Countdown.COLUMN_TAG,
+                Countdown.TABLE_TAG_REFERENCE,
+                Countdown.COLUMN_TIMER_ID,
+                timer.getId()
+        );
+        Log.i("Query", query);
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery(query, null);
+
+        c.moveToFirst();
+        ArrayList<String> tags = new ArrayList<>();
+
+        while (!c.isAfterLast()) {
+            try {
+                tags.add(c.getString(c.getColumnIndex(Countdown.COLUMN_TAG)));
+                c.moveToNext();
+            } catch (SQLiteException e) {
+                Log.e("DatabaseHelper", "Error while loading tags", e);
+            }
+        }
+        c.close();
+        db.close();
+
+        return tags;
+    }
+
     public void assignTone(Timer timer, Uri tone) {
         int id = timer.getId();
         if (id < 0) return;
@@ -261,6 +393,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void removeTag(ArrayList<String> tags) {
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            for (String tag : tags) {
+//                String query = String.format(
+//                        "DELETE FROM %s WHERE %s = %s",
+//                        Countdown.TABLE_TAGS,
+//                        Countdown.COLUMN_TAG,
+//                        tag
+//                );
+                db.delete(
+                        Countdown.TABLE_TAGS,
+                        Countdown.COLUMN_TAG + " = ?",
+                        new String[]{tag}
+                );
+
+                db.delete(
+                        Countdown.TABLE_TAG_REFERENCE,
+                        Countdown.COLUMN_TAG + " = ?",
+                        new String[]{tag}
+                );
+            }
+        }
+    }
+
+    public void assignTag(Timer timer, ArrayList<String> tags) {
+        SQLiteDatabase db = getWritableDatabase();
+        int timerId = timer.getId();
+
+        for (String tag : tags) {
+            try {
+                ContentValues args = new ContentValues();
+                args.put(Countdown.COLUMN_TAG, tag);
+                args.put(Countdown.COLUMN_TIMER_ID, timerId);
+                db.insert(Countdown.TABLE_TAG_REFERENCE, null, args);
+            } catch (Exception e) {
+                Log.e("DatabaseHelper", "Error while assigning " + tag + " to timer", e);
+            }
+        }
+
+    }
 
     private interface Patch {
         void apply(SQLiteDatabase db);
