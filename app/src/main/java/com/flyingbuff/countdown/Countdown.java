@@ -15,6 +15,8 @@ import org.joda.time.LocalTime;
 public class Countdown extends Application {
     public static final String PACKAGE_NAME = "com.flyingbuff.countdown";
 
+//    public static final Long
+
     public static final String TABLE_TIMER = "timer";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NAME = "name";
@@ -34,8 +36,11 @@ public class Countdown extends Application {
     public static final String KEY_TIMER_END = "timer_end_time";
     public static final String KEY_TIMER_NAME = "timer_name";
 
-    public static final long MILLIS_IN_DAY = 86400000;
-    public static final long MILLIS_IN_HOUR = 3600000;
+    public static final long MILLIS_IN_SECOND = 1000;
+    public static final long MILLIS_IN_MINUTE = MILLIS_IN_SECOND * 60;
+    public static final long MILLIS_IN_HOUR = MILLIS_IN_MINUTE * 60;
+    public static final long MILLIS_IN_DAY = MILLIS_IN_HOUR * 24;
+
     public static final String KEY_TIMER_NOTIFY = "timer_notify";
     public static final String KEY_TIMER_AUTO_DEL = "timer_auto_delete";
     public static final int ACTIVITY_ACTION_RINGTONE = 1000;
@@ -44,6 +49,7 @@ public class Countdown extends Application {
 
     public static final long SECONDS_IN_HOUR = 3600;
     public static final long SECONDS_IN_MINUTE = 60;
+
     public static final String TABLE_ALERT = "alert";
     public static final String COLUMN_TIMER_ID = "timer";
     public static final String COLUMN_URI = "uri";
@@ -55,6 +61,11 @@ public class Countdown extends Application {
     public static final String KEY_SINGLE_TAG = "single_tag";
     public static final String KEY_TIMER_TAG = "timer_tag";
     public static final String COLUMN_RESUMED_AT = "resumed_at";
+    public static final int ALARM_REQUEST_CODE = 101;
+    public static final String COLUMN_STOPPED = "stopped";
+    public static final String COLUMN_MISSED = "missed";
+    public static final String KEY_MEDIA_PLAYER = "media_player";
+    public static final String KEY_MUSIC_VOLUME = "media_impl";
 
     @Override
     public void onCreate() {
@@ -62,6 +73,7 @@ public class Countdown extends Application {
 
         JodaTimeAndroid.init(this);
         TimerBase.init(this);
+        AlarmHandler.init(this);
     }
 
 

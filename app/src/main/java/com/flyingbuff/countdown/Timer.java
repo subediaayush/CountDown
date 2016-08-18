@@ -7,7 +7,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 
 import java.util.Comparator;
-import java.util.Locale;
 
 /**
  * Created by Aayush on 8/7/2016.
@@ -42,6 +41,9 @@ public class Timer extends TimerBase {
     private boolean silent;
 
     private boolean paused;
+    private boolean stopped;
+
+    private boolean missed;
 
     public Timer(
             int id,
@@ -55,7 +57,9 @@ public class Timer extends TimerBase {
             boolean repeat,
             boolean notify,
             boolean silent,
-            boolean paused
+            boolean paused,
+            boolean stopped,
+            boolean missed
     ) {
         this.id = id;
         this.name = name;
@@ -69,6 +73,8 @@ public class Timer extends TimerBase {
         this.notify = notify;
         this.silent = silent;
         this.paused = paused;
+        this.stopped = stopped;
+        this.missed = missed;
     }
 
     public Timer(long end) {
@@ -92,9 +98,6 @@ public class Timer extends TimerBase {
     }
 
     public Timer(String name, long start, long end, boolean repeat, boolean notify, boolean silent) {
-        start = Countdown.normalize(start);
-        end = Countdown.normalize(end);
-
         this.name = name;
 
         this.start = start;
@@ -112,6 +115,9 @@ public class Timer extends TimerBase {
         this.silent = silent;
 
         this.paused = false;
+        this.stopped = true;
+
+        this.missed = false;
     }
 
     public int getId() {
@@ -197,23 +203,31 @@ public class Timer extends TimerBase {
         }
     }
 
-    public String[] formatDuration() {
+    public int[] formatDuration() {
         return formatDuration(getRemainingTime());
     }
 
-    public static String[] formatDuration(long duration) {
-        if (duration < 1) return new String[]{"-1"};
+    public static int[] formatDuration(long duration) {
+        boolean negativeDuration = false;
 
-        int order = getOrder(duration);
-
-        String output = String.valueOf(order);
-        Locale l = Locale.getDefault();
-
-        for (int i = order; i >= Math.max(order - 2, SECOND); i--) {
-            output += String.format(l, " %02d ", getField(duration, i));
-            output += TIME_UNIT[i];
+        if (duration < 0) {
+            negativeDuration = true;
+            duration = -duration;
         }
-        return output.split(" ");
+
+        int order = negativeDuration ? -getOrder(duration) : getOrder(duration);
+
+        int absOrder = Math.abs(order);
+
+        int output[] = new int[absOrder + 2];
+
+        for (int i = output.length - 1; i > MILLI; i--) {
+            output[i] = getField(duration, i - 1);
+        }
+
+        output[0] = order;
+
+        return output;
     }
 
     public String humanize() {
@@ -221,16 +235,45 @@ public class Timer extends TimerBase {
     }
 
     public static String humanize(long duration) {
-        String[] durationString = Timer.formatDuration(duration);
+
+        duration += duration % 1000 == 0 ? 0 : 1000;
+
+        int[] durationArray = Timer.formatDuration(duration);
+
+        int order = durationArray[0];
 
         StringBuilder builder = new StringBuilder();
-        for (int i = 1; i < durationString.length; i += 2) {
-            if (!"00".equals(durationString[i])) {
-                builder.append(durationString[i]).append(" ");
-                builder.append(durationString[i + 1]).append(" ");
+        for (int i = order + 1; i >= Math.max(order - 2, 2); i--) {
+            if (durationArray[i] != 0) {
+                builder.append(durationArray[i]).append(" ");
+                builder.append(TIME_UNIT[i - 1]).append(" ");
             }
         }
         return builder.toString();
+    }
+
+    public static String humanizeDateTime(long dateTime) {
+        DateTime endDateTime = new DateTime(dateTime);
+
+        LocalDate endDate = endDateTime.toLocalDate();
+        LocalDate today = LocalDate.now();
+
+        StringBuilder summary = new StringBuilder();
+
+        summary.append(endDateTime.toString("hh:mm a"));
+        if (endDate.isAfter(today.plusDays(1))) {
+            summary.append(", ");
+            if (endDate.isAfter(today.plusDays(5)))
+                summary.append(endDate.toString("dd MMM"));
+            else
+                summary.append(endDate.toString("EEEE"));
+            if (endDate.getYear() != today.getYear())
+                summary.append(", ")
+                        .append(endDate.toString("yyyy"));
+        } else if (endDate.isAfter(today))
+            summary.append(" tommorow");
+
+        return summary.toString();
     }
 
     public String humanizeEndDateTime(String prefix) {
@@ -264,8 +307,10 @@ public class Timer extends TimerBase {
     }
 
     public long getElapsedTime() {
+        if (stopped) return duration;
+
         if (paused_at <= resumed_at)
-            return elapsed + DateTime.now().getMillis() - resumed_at;
+            return Math.min(duration, elapsed + DateTime.now().getMillis() - resumed_at);
         else
             return elapsed;
     }
@@ -279,10 +324,30 @@ public class Timer extends TimerBase {
     }
 
     @Override
-    protected void pauseTimer() {
-        super.pauseTimer();
+    protected void startTimer() {
+        long now = DateTime.now().getMillis();
 
-        long now = Countdown.normalize(DateTime.now().getMillis());
+        paused_at = now;
+        resumed_at = now;
+        paused = false;
+        elapsed = 0;
+        stopped = false;
+
+        ContentValues args = new ContentValues();
+        args.put(Countdown.COLUMN_STOPPED, stopped);
+        args.put(Countdown.COLUMN_ELAPSED, elapsed);
+        args.put(Countdown.COLUMN_PAUSED_AT, paused_at);
+        args.put(Countdown.COLUMN_PAUSED, paused);
+        args.put(Countdown.COLUMN_RESUMED_AT, resumed_at);
+
+        getDatabaseHelper().editTimer(id, args);
+
+        super.startTimer();
+    }
+
+    @Override
+    protected void pauseTimer() {
+        long now = DateTime.now().getMillis();
 
         elapsed = getElapsedTime();
         paused_at = now;
@@ -294,13 +359,14 @@ public class Timer extends TimerBase {
         args.put(Countdown.COLUMN_PAUSED, paused);
 
         getDatabaseHelper().editTimer(id, args);
+
+        super.pauseTimer();
     }
 
     @Override
     protected void resumeTimer() {
-        super.resumeTimer();
 
-        long now = Countdown.normalize(DateTime.now().getMillis());
+        long now = DateTime.now().getMillis();
 
         paused = false;
         resumed_at = now;
@@ -310,57 +376,89 @@ public class Timer extends TimerBase {
         args.put(Countdown.COLUMN_PAUSED, paused);
 
         getDatabaseHelper().editTimer(id, args);
+
+        super.resumeTimer();
     }
 
     @Override
     protected void resetTimer() {
-        super.resetTimer();
 
-        long now = Countdown.normalize(DateTime.now().getMillis());
+        long now = DateTime.now().getMillis();
 
         elapsed = 0;
         paused_at = now;
         resumed_at = now;
+        paused = false;
 
         ContentValues args = new ContentValues();
         args.put(Countdown.COLUMN_ELAPSED, elapsed);
         args.put(Countdown.COLUMN_RESUMED_AT, resumed_at);
         args.put(Countdown.COLUMN_PAUSED_AT, paused_at);
+        args.put(Countdown.COLUMN_PAUSED, paused);
 
         getDatabaseHelper().editTimer(id, args);
 
-        resumeTimer();
+        super.resetTimer();
     }
 
     @Override
     protected void saveTimer() {
-        super.saveTimer();
 
         getDatabaseHelper().saveTimer(this);
+        super.saveTimer();
     }
 
     @Override
-    protected void timeOut() {
-        super.timeOut();
+    protected void stopTimer() {
+        elapsed = getDuration();
+        stopped = true;
+        missed = true;
+
+        ContentValues args = new ContentValues();
+        args.put(Countdown.COLUMN_ELAPSED, elapsed);
+        args.put(Countdown.COLUMN_STOPPED, stopped);
+        args.put(Countdown.COLUMN_MISSED, missed);
+
+        getDatabaseHelper().editTimer(id, args);
+
+        super.stopTimer();
     }
 
     public static final Comparator<Timer> REMAINING_TIME_COMPARATOR = new Comparator<Timer>() {
         @Override
         public int compare(Timer lhs, Timer rhs) {
-            return (int) (lhs.getTimeOut() - rhs.getTimeOut());
+            long firstTimerValue;
+            long secondTimerValue;
+
+            if (lhs.isMissed()) firstTimerValue = lhs.getDuration() + Long.MIN_VALUE;
+            else firstTimerValue = lhs.getRemainingTime();
+
+            if (rhs.isMissed()) secondTimerValue = rhs.getDuration() + Long.MIN_VALUE;
+            else secondTimerValue = rhs.getRemainingTime();
+
+            if (firstTimerValue == secondTimerValue) {
+                firstTimerValue = lhs.getStart();
+                secondTimerValue = rhs.getStart();
+            }
+
+            return (int) Math.signum((firstTimerValue) - (secondTimerValue));
         }
     };
     public static final Comparator<Timer> ALPHABETICAL_COMPARATOR = new Comparator<Timer>() {
         @Override
         public int compare(Timer lhs, Timer rhs) {
-            return lhs.getName().compareTo(rhs.getName());
+            int output = (int) Math.signum(lhs.getName().compareTo(rhs.getName()));
+            if (output == 0) output = REMAINING_TIME_COMPARATOR.compare(lhs, rhs);
+            return output;
         }
     };
 
     public static final Comparator<Timer> CREATION_DATE_COMPARATOR = new Comparator<Timer>() {
         @Override
         public int compare(Timer lhs, Timer rhs) {
-            return (int) (lhs.getStart() - rhs.getStart());
+            int output = (int) (lhs.getStart() - rhs.getStart());
+            if (output == 0) output = REMAINING_TIME_COMPARATOR.compare(lhs, rhs);
+            return output;
         }
     };
 
@@ -368,7 +466,18 @@ public class Timer extends TimerBase {
         this.id = id;
     }
 
-    public float getProgress() {
-        return getElapsedTime() / (float) getDuration();
+    public int getProgress() {
+        float normalizedElapsedTime = Countdown.normalize(getElapsedTime());
+        float normalizedDuration = Countdown.normalize(getDuration());
+
+        return (int) Math.ceil(normalizedElapsedTime / normalizedDuration * 100);
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public boolean isMissed() {
+        return missed;
     }
 }

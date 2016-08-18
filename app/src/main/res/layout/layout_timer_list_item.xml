@@ -37,14 +37,17 @@
                     android:layout_width="75dp"
                     android:layout_height="75dp"
                     android:layout_centerInParent="true"
-                    android:layout_margin="0dp"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:textOn=""
+                    android:textOff=""
+                    android:background="@drawable/toggle_background"
                     android:padding="0dp" />
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:animateLayoutChanges="true"
                 android:orientation="vertical">
 
                 <TextView
@@ -104,35 +107,9 @@
                     android:layout_gravity="center_vertical"
                     android:divider="@drawable/transparent_divider"
                     android:orientation="horizontal"
-                    android:showDividers="middle">
+                    android:showDividers="middle" />
 
-                    <TextView
-                        style="@style/Timer.Tag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" tag" />
 
-                    <TextView
-                        style="@style/Timer.Tag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/tag"
-                        android:text="a very long tag" />
-
-                    <TextView
-                        style="@style/Timer.Tag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/tag"
-                        android:text="a very long tag" />
-
-                    <TextView
-                        style="@style/Timer.Tag"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/tag"
-                        android:text="a very long tag" />
-                </LinearLayout>
             </HorizontalScrollView>
 
             <LinearLayout

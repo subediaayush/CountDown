@@ -22,6 +22,12 @@
         <activity
             android:name=".SearchTagActivity"
             android:theme="@style/SearchTagsTheme" />
+
+        <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".AlarmNotificationHandler" />
+
+        <service android:name=".AlarmPlayerService" />
+
     </application>
 
 </manifest>

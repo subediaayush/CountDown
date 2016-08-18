@@ -27,8 +27,10 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
@@ -481,14 +483,7 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
         } else {
             summary.append("after ");
 
-            String[] summaryComp = Timer.formatDuration(duration);
-
-            for (int i = 1; i < summaryComp.length; i += 2) {
-                if (!"00".equals(summaryComp[i])) {
-                    summary.append(summaryComp[i]).append(" ");
-                    summary.append(summaryComp[i + 1]).append(" ");
-                }
-            }
+            summary.append(Timer.humanize(duration));
 
             metaInfo.setText(summary.toString());
         }
@@ -520,19 +515,31 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
         if (!args.containsKey(Countdown.KEY_TIMER_ADD))
             args.putBoolean(Countdown.KEY_TIMER_ADD, true);
 
-        if (!args.containsKey(Countdown.KEY_TIMER_END))
-            args.putLong(Countdown.KEY_TIMER_END, Countdown.MILLIS_IN_HOUR);
+        if (!args.containsKey(Countdown.KEY_TIMER_END)) {
+            long duration;
+            if (BuildConfig.DEBUG)
+                duration = Countdown.MILLIS_IN_SECOND * 5;
+            else
+                duration = Countdown.MILLIS_IN_HOUR;
+
+            args.putLong(Countdown.KEY_TIMER_END, duration);
+        }
 
         if (!args.containsKey(Countdown.KEY_TIMER_NAME))
             args.putString(Countdown.KEY_TIMER_NAME, "");
 
         if (!args.containsKey(Countdown.KEY_TIMER_NOTIFY))
-            args.putBoolean(Countdown.KEY_TIMER_NOTIFY, true);
+            if (BuildConfig.DEBUG)
+                args.putBoolean(Countdown.KEY_TIMER_NOTIFY, false);
+            else
+                args.putBoolean(Countdown.KEY_TIMER_NOTIFY, true);
 
         if (!args.containsKey(Countdown.KEY_TIMER_TONE)) {
             boolean notify = args.getBoolean(Countdown.KEY_TIMER_NOTIFY);
             if (notify)
                 args.putParcelable(Countdown.KEY_TIMER_TONE, Settings.System.DEFAULT_ALARM_ALERT_URI);
+            else
+                args.putParcelable(Countdown.KEY_TIMER_TONE, Uri.EMPTY);
         }
 
         if (!args.containsKey(Countdown.KEY_TIMER_TAG))
@@ -552,16 +559,7 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
         String endTime = endDateTime.toString("hh : mm a");
         String endDate = endDateTime.toString("MMM dd, yyyy");
 
-        String[] durationString = Timer.formatDuration(timerDuration);
-
-        StringBuilder builder = new StringBuilder();
-        for (int i = 1; i < durationString.length; i += 2) {
-            if (!"00".equals(durationString[i])) {
-                builder.append(durationString[i]).append(" ");
-                builder.append(durationString[i + 1]).append(" ");
-            }
-        }
-        String endTimer = builder.toString();
+        String endTimer = Timer.humanize(timerDuration);
 
         addEndTime.setText(endTime);
         addEndDate.setText(endDate);
@@ -657,7 +655,7 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
         if (tags == null) tags = new ArrayList<>();
 
         if (tags.isEmpty()) timerTagPlaceholder.setVisibility(View.VISIBLE);
-        else timerTagPlaceholder.setVisibility(View.INVISIBLE);
+        else timerTagPlaceholder.setVisibility(View.GONE);
 
         int totalDisplayedTags = timerTagContaier.getChildCount();
         for (int i = totalDisplayedTags - 1; i >= 0; i--) {
@@ -668,7 +666,14 @@ public class AddTimerFragment extends BottomSheetDialogFragment {
 
         for (String tag : tags) {
             if (timerTagContaier.findViewWithTag(tag) != null) continue;
-            TextView tagView = new TextView(context, null, R.style.Timer_Tag);
+            TextView tagView = (TextView) LayoutInflater.from(context)
+                    .inflate(R.layout.template_tag, null);
+            ViewGroup.MarginLayoutParams mp = new ViewGroup.MarginLayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            mp.setMargins(5, 5, 5, 5);
+            tagView.setLayoutParams(mp);
             tagView.setTag(tag);
             tagView.setText(tag);
             timerTagContaier.addView(tagView);

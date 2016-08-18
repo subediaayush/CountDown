@@ -89,7 +89,6 @@ public class SearchTagActivity extends AppCompatActivity implements SearchView.O
         applyTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedTags.clear();
                 selectedTags.addAll(adapter.getSelectedItems());
 
                 ArrayList<String> output = new ArrayList<>();
@@ -110,7 +109,7 @@ public class SearchTagActivity extends AppCompatActivity implements SearchView.O
 
                 selectedTags.add(searchItem);
 
-                ArrayList<String> output = new ArrayList<String>();
+                ArrayList<String> output = new ArrayList<>();
                 output.addAll(selectedTags);
 
                 Intent result = new Intent();
