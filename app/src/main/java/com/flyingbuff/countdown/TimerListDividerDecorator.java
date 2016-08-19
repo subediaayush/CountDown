@@ -8,10 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 
-public class SimpleItemDecoration extends RecyclerView.ItemDecoration {
+public class TimerListDividerDecorator extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
 
-    public SimpleItemDecoration(Context context) {
+    public TimerListDividerDecorator(Context context) {
         mDivider = ContextCompat.getDrawable(context, R.drawable.divider);
     }
 

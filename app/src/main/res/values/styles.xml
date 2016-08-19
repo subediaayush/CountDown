@@ -157,4 +157,10 @@
         <item name="android:indeterminate">false</item>
         <item name="android:progressDrawable">@drawable/circular_progress_bar</item>
     </style>
+
+    <style name="Timer.ToggleButton" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:textOn" />
+        <item name="android:textOff" />
+        <item name="android:background">@drawable/toggle_background</item>
+    </style>
 </resources>

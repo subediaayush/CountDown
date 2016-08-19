@@ -48,4 +48,9 @@ public class TimerBase {
     }
 
 
+    protected void deleteTimer() {
+        AlarmHandler.validate(this);
+        Log.i("TimerBase", "Timer Deleted");
+
+    }
 }

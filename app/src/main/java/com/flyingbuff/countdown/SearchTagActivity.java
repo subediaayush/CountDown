@@ -54,19 +54,11 @@ public class SearchTagActivity extends AppCompatActivity implements SearchView.O
 
         searchResultList = (RecyclerView) findViewById(R.id.search_list);
         searchResultList.setLayoutManager(new LinearLayoutManager(this));
-        searchResultList.addItemDecoration(new SimpleItemDecoration(this));
+        searchResultList.addItemDecoration(new TimerListDividerDecorator(this));
 
         adapter = new SearchAdapter(this, selectedTags);
 
         adapter.setItemSelectedListener(new SearchAdapter.ListItemSelectedListener() {
-            @Override
-            public void onItemSelected(String tag, int totalSelectedItems) {
-
-            }
-
-            @Override
-            public void onItemDeselected(String tag, int totalSelectedItems) {
-            }
 
             @Override
             public void onItemSelectionChanged(int totalSelectedItems) {
@@ -143,13 +135,11 @@ public class SearchTagActivity extends AppCompatActivity implements SearchView.O
 
     @Override
     public boolean onQueryTextChange(String newQuery) {
-        if (!adapter.isTagPresent(newQuery)) {
-            if (newQuery.isEmpty()) {
-                addNewTag.setVisibility(View.GONE);
-            } else {
-                addNewTag.setText("Add \"" + newQuery + "\" tag");
-                addNewTag.setVisibility(View.VISIBLE);
-            }
+        if (!(adapter.isTagPresent(newQuery) || newQuery.isEmpty())) {
+            addNewTag.setText("Add \"" + newQuery + "\" tag");
+            addNewTag.setVisibility(View.VISIBLE);
+        } else {
+            addNewTag.setVisibility(View.GONE);
         }
 
         searchItem = newQuery;

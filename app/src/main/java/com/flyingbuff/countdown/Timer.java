@@ -329,16 +329,18 @@ public class Timer extends TimerBase {
 
         paused_at = now;
         resumed_at = now;
-        paused = false;
         elapsed = 0;
+        paused = false;
         stopped = false;
+        missed = false;
 
         ContentValues args = new ContentValues();
-        args.put(Countdown.COLUMN_STOPPED, stopped);
         args.put(Countdown.COLUMN_ELAPSED, elapsed);
         args.put(Countdown.COLUMN_PAUSED_AT, paused_at);
-        args.put(Countdown.COLUMN_PAUSED, paused);
         args.put(Countdown.COLUMN_RESUMED_AT, resumed_at);
+        args.put(Countdown.COLUMN_STOPPED, stopped);
+        args.put(Countdown.COLUMN_PAUSED, paused);
+        args.put(Countdown.COLUMN_PAUSED, missed);
 
         getDatabaseHelper().editTimer(id, args);
 
@@ -403,7 +405,6 @@ public class Timer extends TimerBase {
 
     @Override
     protected void saveTimer() {
-
         getDatabaseHelper().saveTimer(this);
         super.saveTimer();
     }
@@ -424,24 +425,34 @@ public class Timer extends TimerBase {
         super.stopTimer();
     }
 
+    @Override
+    protected void deleteTimer() {
+        getDatabaseHelper().removeTimer(id);
+
+        super.deleteTimer();
+    }
+
     public static final Comparator<Timer> REMAINING_TIME_COMPARATOR = new Comparator<Timer>() {
         @Override
         public int compare(Timer lhs, Timer rhs) {
-            long firstTimerValue;
-            long secondTimerValue;
+            long[] timerValues = new long[]{0, 0};
+            Timer[] timers = new Timer[]{lhs, rhs};
 
-            if (lhs.isMissed()) firstTimerValue = lhs.getDuration() + Long.MIN_VALUE;
-            else firstTimerValue = lhs.getRemainingTime();
+            for (int i = 0; i < 2; i++) {
+                Timer timer = timers[i];
 
-            if (rhs.isMissed()) secondTimerValue = rhs.getDuration() + Long.MIN_VALUE;
-            else secondTimerValue = rhs.getRemainingTime();
-
-            if (firstTimerValue == secondTimerValue) {
-                firstTimerValue = lhs.getStart();
-                secondTimerValue = rhs.getStart();
+                if (timer.isMissed()) timerValues[i] = timer.getDuration() + Long.MIN_VALUE / 2;
+                else if (timer.isStopped())
+                    timerValues[i] = timer.getDuration() + Long.MAX_VALUE / 2;
+                else timerValues[i] = timer.getRemainingTime();
             }
 
-            return (int) Math.signum((firstTimerValue) - (secondTimerValue));
+            if (timerValues[0] == timerValues[1]) {
+                timerValues[0] = timers[0].getStart();
+                timerValues[1] = timers[1].getStart();
+            }
+
+            return (int) Math.signum(timerValues[0] - timerValues[1]);
         }
     };
     public static final Comparator<Timer> ALPHABETICAL_COMPARATOR = new Comparator<Timer>() {
@@ -479,5 +490,9 @@ public class Timer extends TimerBase {
 
     public boolean isMissed() {
         return missed;
+    }
+
+    public void setMissed(boolean missed) {
+        this.missed = missed;
     }
 }

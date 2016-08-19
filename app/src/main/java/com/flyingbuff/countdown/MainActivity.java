@@ -11,11 +11,9 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 
@@ -28,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     TimerAdapter timerAdapter;
     ArrayList<Timer> timerList;
     LinearLayoutManager timerLayoutManager;
+    TimerListAnimator timerListAnimator;
     Handler updateUiHandler = new Handler();
     Runnable updateUiRunnable = new Runnable() {
         @Override
@@ -61,35 +60,20 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         timerListView = (RecyclerView) findViewById(R.id.timer_list);
+
         timerLayoutManager = new LinearLayoutManager(this);
         timerListView.setLayoutManager(timerLayoutManager);
-        ((DefaultItemAnimator) timerListView.getItemAnimator()).setSupportsChangeAnimations(false);
 
-        ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                // callback for drag-n-drop, false to skip this feature
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                // callback for swipe to dismiss, removing item from data and adapter
-
-                int removePosition = viewHolder.getAdapterPosition();
-                Timer timer = timerAdapter.removeTimerAt(removePosition);
-                databaseHelper.removeTimer(timer.getId());
-                AlarmHandler.validate(timer);
-            }
-        });
-
-        swipeToDismissTouchHelper.attachToRecyclerView(timerListView);
+        timerListAnimator = new TimerListAnimator();
+        timerListAnimator.setSupportsChangeAnimations(false);
+        timerListView.setItemAnimator(timerListAnimator);
 
         timerList = databaseHelper.loadTimer();
 
         timerAdapter = new TimerAdapter(this, timerList);
         timerListView.setAdapter(timerAdapter);
+
+//        timerListView.addItemDecoration(new TimerListBackgroundDecorator());
 
         updateUiHandler.post(updateUiRunnable);
 
@@ -161,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        AlarmHandler.validate();
+        AlarmHandler.validate(false);
     }
 
     @Override
@@ -182,5 +166,13 @@ public class MainActivity extends AppCompatActivity {
 
         LocalBroadcastManager.getInstance(this)
                 .unregisterReceiver(alarmReceiver);
+    }
+
+    private void deleteItem(RecyclerView.ViewHolder viewHolder) {
+        int removePosition = viewHolder.getAdapterPosition();
+        Timer timer = timerAdapter.removeTimerAt(removePosition);
+        databaseHelper.removeTimer(timer.getId());
+        AlarmHandler.validate(timer);
+
     }
 }

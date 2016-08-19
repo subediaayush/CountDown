@@ -33,7 +33,11 @@ public class AlarmHandler {
     }
 
     public static void validate(Timer timer) {
-        if (timer.isNotify()) validateNoisyTimers();
+        validate(timer.isNotify());
+    }
+
+    public static void validate(Boolean isNoisy) {
+        if (isNoisy) validateNoisyTimers();
         else validateSilentTimers();
     }
 
@@ -44,6 +48,7 @@ public class AlarmHandler {
 
         if (runningTimers.isEmpty()) {
             silentAlarmMangaer.removeCallbacksAndMessages(null);
+            Log.i("TimerBaseValidator", "0 running silent timers, cancelling alarm");
             return;
         }
 
@@ -60,6 +65,7 @@ public class AlarmHandler {
             public void run() {
                 Intent silentTimerIntent = new Intent(context, AlarmReceiver.class);
                 silentTimerIntent.setAction(AlarmReceiver.ACTION_SILENT_ALARM);
+                silentTimerIntent.setFlags(Intent.FLAG_RECEIVER_FOREGROUND);
 
                 silentTimerIntent.putExtra(Countdown.KEY_TIMER_TAG, minTimer.getId());
                 Log.i("TimerBaseValidator", "Silent alarm triggered");
@@ -80,6 +86,7 @@ public class AlarmHandler {
 
         Intent alarmTimerIntent = new Intent(context, AlarmReceiver.class);
         alarmTimerIntent.setAction(AlarmReceiver.ACTION_NOISY_ALARM);
+        alarmTimerIntent.setFlags(Intent.FLAG_RECEIVER_FOREGROUND);
 
         if (runningTimers.isEmpty()) {
             PendingIntent alarmIntent = PendingIntent.getBroadcast(
@@ -91,7 +98,7 @@ public class AlarmHandler {
 
             noisyAlarmManager.cancel(alarmIntent);
             alarmIntent.cancel();
-            Log.i("TimerBaseValidator", "0 running timers, cancelling alarm");
+            Log.i("TimerBaseValidator", "0 running noisy timers, cancelling alarm");
             return;
         }
 

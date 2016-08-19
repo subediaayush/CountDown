@@ -3,10 +3,14 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="colorCardHighlight">@color/md_yellow_100</color>
+    <color name="colorWhiteTransparent">#0FFF</color>
+
     <color name="gray">#fCCC</color>
     <color name="blue">#F00F</color>
     <color name="light_gray">#fEEE</color>
     <color name="black">#F000</color>
     <color name="white">#FFFF</color>
-
+    <color name="yellow">#FFF0</color>
 </resources>

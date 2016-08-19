@@ -21,7 +21,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.StringSear
 
     private Context context;
 
-    private ListItemClickListener itemClickListener;
     private ListItemSelectedListener itemSelectedListener;
 
     private HashSet<String> selectedItems;
@@ -74,37 +73,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.StringSear
         this.sortedTags.addAll(tags);
     }
 
-    public void addTag(String tag) {
-        sortedTags.add(tag);
-    }
-
-    public void addTag(List<String> tag) {
-        sortedTags.addAll(tag);
-    }
-
-    public void removeTag(String tag) {
-        sortedTags.remove(tag);
-    }
-
-    public void removeTag(List<String> tags) {
-        this.sortedTags.beginBatchedUpdates();
-        for (String tag : tags) {
-            this.sortedTags.remove(tag);
-            this.tags.remove(tag);
-            this.selectedItems.remove(tag);
-        }
-        this.sortedTags.endBatchedUpdates();
-    }
-
     public void setSelected(String tag, boolean selected) {
         if (selected) {
             selectedItems.add(tag);
-            if (itemSelectedListener != null)
-                itemSelectedListener.onItemSelected(tag, selectedItems.size());
         } else {
             selectedItems.remove(tag);
-            if (itemSelectedListener != null)
-                itemSelectedListener.onItemDeselected(tag, selectedItems.size());
         }
     }
 
@@ -124,7 +97,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.StringSear
 
     @Override
     public StringSearchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_search_result, parent, false);
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.layout_search_result, parent, false);
         return new StringSearchViewHolder(view);
     }
 
@@ -149,10 +123,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.StringSear
         return sortedTags.size();
     }
 
-    public void setItemClickListener(ListItemClickListener itemClickListener) {
-        this.itemClickListener = itemClickListener;
-    }
-
     public void setSearchQuery(String query) {
         query = query.toLowerCase();
 
@@ -170,14 +140,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.StringSear
         output.addAll(selectedItems);
 
         output.retainAll(tags);
-        return output;
-    }
-
-    private ArrayList<String> getDumbList(SortedList<String> tags) {
-        ArrayList<String> output = new ArrayList<>();
-        for (int i = 0; i < tags.size(); i++) {
-            output.add(tags.get(i));
-        }
         return output;
     }
 
@@ -201,10 +163,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.StringSear
     }
 
     interface ListItemSelectedListener {
-        void onItemSelected(String tag, int totalSelectedItems);
-
-        void onItemDeselected(String tag, int totalSelectedItems);
-
         void onItemSelectionChanged(int totalSelectedItems);
     }
 }
