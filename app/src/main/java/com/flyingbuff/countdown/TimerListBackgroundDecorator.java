@@ -1,9 +1,10 @@
 package com.flyingbuff.countdown;
 
+import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -12,8 +13,8 @@ public class TimerListBackgroundDecorator extends RecyclerView.ItemDecoration {
     // we want to cache this and not allocate anything repeatedly in the onDraw method
     Drawable background;
 
-    public TimerListBackgroundDecorator() {
-        background = new ColorDrawable(Color.RED);
+    public TimerListBackgroundDecorator(Context context) {
+        background = new ColorDrawable(ContextCompat.getColor(context, R.color.colorDeletedLayout));
     }
 
     @Override
@@ -62,8 +63,10 @@ public class TimerListBackgroundDecorator extends RecyclerView.ItemDecoration {
                 bottom = firstViewComingUp.getTop() + (int) firstViewComingUp.getTranslationY();
             } else if (lastViewComingDown != null) {
                 // views are going down to fill the void
-                top = lastViewComingDown.getBottom() + (int) lastViewComingDown.getTranslationY();
-                bottom = lastViewComingDown.getBottom();
+//                top = lastViewComingDown.getBottom() + (int) lastViewComingDown.getTranslationY();
+//                bottom = lastViewComingDown.getBottom();
+                super.onDraw(c, parent, state);
+                return;
             } else if (firstViewComingUp != null) {
                 // views are coming up to fill the void
                 top = firstViewComingUp.getTop();

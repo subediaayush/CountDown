@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	app:layout_behavior="@string/appbar_scrolling_view_behavior"
+	tools:context="com.flyingbuff.countdown.TimerDetailActivity"
+	>
+
+	<FrameLayout
+		android:id="@+id/highlight_timer_container"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/height_highlited_timer"
+		/>
+
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		>
+
+		<ViewFlipper
+			android:id="@+id/timer_options_panel"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:elevation="2dp"
+			>
+
+			<android.support.v4.widget.NestedScrollView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:overScrollMode="never"
+				android:elevation="2dp"
+				>
+
+				<FrameLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					>
+
+					<include layout="@layout/layout_timer_details"/>
+				</FrameLayout>
+			</android.support.v4.widget.NestedScrollView>
+
+			<android.support.v4.widget.NestedScrollView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:overScrollMode="never"
+				android:elevation="2dp"
+				>
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:paddingBottom="81dp"
+					>
+
+					<include layout="@layout/layout_timer_options"/>
+
+				</LinearLayout>
+			</android.support.v4.widget.NestedScrollView>
+		</ViewFlipper>
+
+
+	</LinearLayout>
+</LinearLayout>

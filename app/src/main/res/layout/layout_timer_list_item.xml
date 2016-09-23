@@ -1,154 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="2dp"
-    android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackgroundBorderless">
 
-    <!--<RelativeLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content">-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="@dimen/height_timer_list_item"
+	android:background="@color/colorDeletedLayout"
+	android:elevation="1dp"
+	>
 
-    <!--<Button-->
-    <!--android:id="@+id/timer_undo_delete"-->
-    <!--style="@style/Base.Widget.AppCompat.Button.Borderless"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_centerVertical="true"-->
-    <!--android:layout_alignParentEnd="true"-->
-    <!--android:text="Undo"-->
-    <!--android:textColor="@color/black" />-->
+	<!--<FrameLayout-->
+	<!--android:layout_width="match_parent"-->
+	<!--android:layout_height="match_parent"-->
+	<!--android:background="@color/colorDeletedLayout"-->
+	<!--&gt;-->
 
-        <LinearLayout
-            android:id="@+id/timer_background"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:orientation="vertical">
+	<Button
+		android:id="@+id/timer_undo_delete"
+		style="@style/Widget.AppCompat.Button.Borderless"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentEnd="true"
+		android:layout_centerInParent="true"
+		android:background="@color/colorDeletedLayout"
+		android:padding="16dp"
+		android:text="Undo"
+		android:textColor="@color/white"
+		/>
+	<!--</FrameLayout>-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
+	<FrameLayout
+		android:id="@+id/timer_background"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/white"
+		>
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp">
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:animateLayoutChanges="true"
+			android:background="?android:attr/selectableItemBackground"
+			android:orientation="vertical"
+			>
 
-                    <ProgressBar
-                        android:id="@+id/timer_progress"
-                        style="@style/Timer.Progress"
-                        android:layout_width="75dp"
-                        android:layout_height="75dp"
-                        android:layout_centerInParent="true"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
-                        android:progressDrawable="@drawable/circular_progress_bar" />
+			<FrameLayout
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/height_timer_container"
+				android:animateLayoutChanges="true"
+				>
 
-                    <ToggleButton
-                        android:id="@+id/timer_pause_toggle"
-                        style="@style/Timer.ToggleButton"
-                        android:layout_width="75dp"
-                        android:layout_height="75dp"
-                        android:layout_centerInParent="true" />
-                </RelativeLayout>
+				<FrameLayout
+					android:layout_width="wrap_content"
+					android:layout_height="48dp"
+					android:layout_gravity="center_vertical"
+					android:layout_marginStart="16dp"
+					>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:animateLayoutChanges="true"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
+					<ProgressBar
+						android:id="@+id/timer_progress"
+						style="@style/Timer.Progress"
+						android:layout_width="48dp"
+						android:layout_height="48dp"
+						android:progressDrawable="@drawable/circular_progress_bar"
+						/>
 
-                    <TextView
-                        android:id="@+id/timer_name"
-                        style="@style/Timer.Title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/string_dummy_name" />
+					<ToggleButton
+						android:id="@+id/timer_pause_toggle"
+						style="@style/Timer.ToggleButton"
+						android:layout_width="48dp"
+						android:layout_height="48dp"
+						/>
+				</FrameLayout>
 
-                    <TextView
-                        android:id="@+id/timer_remaining_time"
-                        style="@style/Timer.Time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@string/string_dummy_timer" />
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:layout_marginEnd="16dp"
+					android:layout_marginStart="72dp"
+					android:animateLayoutChanges="true"
+					android:orientation="vertical"
+					>
 
-                    <TextView
-                        android:id="@+id/timer_end_datetime"
-                        style="@style/Timer.Detail"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@string/string_dummy_timer_detail" />
-                </LinearLayout>
-            </LinearLayout>
+					<TextView
+						android:id="@+id/timer_name"
+						style="@style/Timer.Title"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginBottom="4dp"
+						android:text="@string/string_dummy_name"
+						/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"
-                android:background="@color/gray" />
+					<TextView
+						android:id="@+id/timer_remaining_time"
+						style="@style/Timer.Time"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginBottom="4dp"
+						android:ellipsize="end"
+						android:maxLines="1"
+						android:text="@string/string_dummy_timer"
+						/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginStart="15dp"
-                android:gravity="center_vertical">
+					<TextView
+						android:id="@+id/timer_end_datetime"
+						style="@style/Timer.Detail"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:ellipsize="end"
+						android:maxLines="1"
+						android:text="@string/string_dummy_timer_detail"
+						/>
+				</LinearLayout>
+			</FrameLayout>
 
-                <HorizontalScrollView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/colorWhiteTransparent"
-                    android:overScrollMode="never"
-                    android:requiresFadingEdge="horizontal"
-                    android:scrollbars="none">
+			<LinearLayout
+				android:id="@+id/bottom_container"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="16dp"
+				android:layout_marginStart="16dp"
+				android:gravity="center_vertical"
+				android:orientation="vertical"
+				>
 
-                    <LinearLayout
-                        android:id="@+id/timer_tag_container"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:divider="@drawable/transparent_divider"
-                        android:orientation="horizontal"
-                        android:showDividers="middle" />
+				<View
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/height_seperator"
+					android:layout_marginEnd="10dp"
+					android:layout_marginStart="10dp"
+					android:background="@color/gray"
+					/>
 
 
-                </HorizontalScrollView>
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:divider="@drawable/transparent_divider"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp"
-                    android:showDividers="middle">
+					<HorizontalScrollView
+						android:layout_width="0dp"
+						android:layout_height="@dimen/height_timer_info_container"
+						android:layout_weight="1"
+						android:background="@color/colorWhiteTransparent"
+						android:overScrollMode="never"
+						android:requiresFadingEdge="horizontal"
+						android:scrollbars="none"
+						>
 
-                    <ImageView
-                        android:id="@+id/timer_indicator_nofity"
-                        style="@style/Timer.Icons"
-                        android:src="@drawable/ic_notify_enabled" />
+						<LinearLayout
+							android:id="@+id/timer_tag_container"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_gravity="center_vertical"
+							android:divider="@drawable/transparent_divider"
+							android:orientation="horizontal"
+							android:showDividers="middle"
+							/>
 
-                    <ImageView
-                        android:id="@+id/timer_indicator_silent"
-                        style="@style/Timer.Icons"
-                        android:src="@drawable/ic_tone_enabled" />
 
-                    <ImageView
-                        android:id="@+id/timer_indicator_repeat"
-                        style="@style/Timer.Icons"
-                        android:src="@drawable/ic_delete_enabled" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    <!--</RelativeLayout>-->
+					</HorizontalScrollView>
 
-</android.support.v7.widget.CardView>
+					<LinearLayout
+						android:layout_width="wrap_content"
+						android:layout_height="match_parent"
+						android:divider="@drawable/transparent_divider"
+						android:paddingBottom="5dp"
+						android:paddingTop="5dp"
+						android:showDividers="middle"
+						>
+
+						<ImageView
+							android:id="@+id/timer_indicator_nofity"
+							style="@style/Timer.Icons"
+							android:src="@drawable/ic_notify_enabled"
+							/>
+
+						<ImageView
+							android:id="@+id/timer_indicator_silent"
+							style="@style/Timer.Icons"
+							android:src="@drawable/ic_tone_enabled"
+							/>
+
+						<ImageView
+							android:id="@+id/timer_indicator_repeat"
+							style="@style/Timer.Icons"
+							android:src="@drawable/ic_repeat_enabled"
+							/>
+					</LinearLayout>
+				</LinearLayout>
+			</LinearLayout>
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/height_seperator"
+				android:background="@color/gray"
+				/>
+
+		</LinearLayout>
+	</FrameLayout>
+</RelativeLayout>

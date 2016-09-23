@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,7 +30,7 @@ public class SearchTagActivity extends AppCompatActivity implements SearchView.O
 
     String searchItem;
     private RadioButton addNewTag;
-    private Button applyTags;
+    private TextView applyTags;
     private Button deleteTags;
     private ButtonBarLayout actionsButtonContainer;
 
@@ -47,10 +48,8 @@ public class SearchTagActivity extends AppCompatActivity implements SearchView.O
         databaseHelper = new DatabaseHelper(this);
 
         addNewTag = (RadioButton) findViewById(R.id.add_new_tag);
-        applyTags = (Button) findViewById(R.id.apply_tag_button);
+        applyTags = (TextView) findViewById(R.id.apply_tag_button);
 //        deleteTags = (Button) findViewById(R.id.delete_tag_button);
-
-        actionsButtonContainer = (ButtonBarLayout) findViewById(R.id.tag_action_button_container);
 
         searchResultList = (RecyclerView) findViewById(R.id.search_list);
         searchResultList.setLayoutManager(new LinearLayoutManager(this));
@@ -62,7 +61,7 @@ public class SearchTagActivity extends AppCompatActivity implements SearchView.O
 
             @Override
             public void onItemSelectionChanged(int totalSelectedItems) {
-                actionsButtonContainer.setVisibility(View.VISIBLE);
+                applyTags.setVisibility(View.VISIBLE);
             }
         });
 
@@ -81,6 +80,7 @@ public class SearchTagActivity extends AppCompatActivity implements SearchView.O
         applyTags.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                selectedTags.clear();
                 selectedTags.addAll(adapter.getSelectedItems());
 
                 ArrayList<String> output = new ArrayList<>();

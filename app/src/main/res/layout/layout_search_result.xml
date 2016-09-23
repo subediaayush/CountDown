@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:orientation="vertical">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="48dp"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	>
 
-    <CheckBox
+	<ImageView
+		android:layout_width="48dp"
+		android:layout_height="48dp"
+		android:padding="12dp"
+		app:srcCompat="@drawable/ic_tag"
+		/>
+
+	<CheckBox
         style="@style/SearchTagsTheme.ListItem"
         android:id="@+id/search_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+		android:paddingStart="64dp"
+		android:text="Tag"
+		android:background="?android:attr/selectableItemBackground"
         android:drawableEnd="?android:attr/listChoiceIndicatorMultiple" />
-</LinearLayout>
+</RelativeLayout>

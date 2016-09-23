@@ -28,7 +28,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.StringSear
     public SearchAdapter(Context context, HashSet<String> initTags) {
         this.context = context;
 
-        tags = new DatabaseHelper(context).loadTags();
+        tags = new DatabaseHelper(context).retrieveTags();
         selectedItems = new HashSet<>();
 
         selectedItems.addAll(initTags);

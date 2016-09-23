@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.joda.time.DateTime;
 
@@ -76,7 +75,7 @@ public class AlarmHandler {
 
         String logMessage = "Message set for " + DateTime.now().plus(smallestTimer).toString("hh:mm:ss a");
         Log.i("TimerBaseValidator", logMessage);
-        Toast.makeText(context, logMessage, Toast.LENGTH_SHORT).show();
+//        if (BuildConfig.DEBUG) Toast.makeText(context, logMessage, Toast.LENGTH_SHORT).show();
     }
 
     public static void validateNoisyTimers() {
@@ -120,7 +119,7 @@ public class AlarmHandler {
         noisyAlarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, alarmIntent);
         String logMessage = "Alarm set for " + new DateTime(alarmTime).toString("hh:mm:ss a");
         Log.i("TimerBaseValidator", logMessage);
-        Toast.makeText(context, logMessage, Toast.LENGTH_SHORT).show();
+//        if (BuildConfig.DEBUG) Toast.makeText(context, logMessage, Toast.LENGTH_SHORT).show();
     }
 
     public static void validate() {

@@ -1,166 +1,195 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
+	<!-- Base application theme. -->
+	<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+		<!-- Customize your theme here. -->
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+		<item name="android:textColor">@color/md_grey_800</item>
+		<item name="android:windowContentTransitions">true</item>
+	</style>
 
-    <style name="AppTheme.AppBar" parent="Theme.AppCompat">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+	<style name="AppTheme.AppBar" parent="Theme.AppCompat">
+		<!-- Customize your theme here. -->
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
 
-        <item name="android:textColorPrimary">@color/white</item>
-    </style>
+		<item name="android:textColorPrimary">@color/white</item>
+	</style>
 
-    <style name="SearchTagsTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+	<style name="SearchTagsTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+		<!-- Customize your theme here. -->
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+		<item name="android:textColor">@color/md_grey_800</item>
 
-    </style>
+	</style>
 
-    <style name="AddTimerTheme" parent="Theme.AppCompat">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <!--<item name="android:windowBackground">@color/colorPrimary</item>-->
-        <!--<item name="android:navigationBarColor">@color/colorPrimary</item>-->
-        <!--<item name="android:actionBarStyle">@color/colorAccent</item>-->
-    </style>
+	<style name="AddTimerTheme" parent="Theme.AppCompat">
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+		<item name="android:textColor">@color/white</item>
+		<!--<item name="android:windowBackground">@color/colorPrimary</item>-->
+		<!--<item name="android:navigationBarColor">@color/colorPrimary</item>-->
+		<!--<item name="android:actionBarStyle">@color/colorAccent</item>-->
+	</style>
 
-    <style name="TimerListItemText">
-        <item name="android:gravity">center</item>
-    </style>
+	<style name="TimerListItemText">
+		<item name="android:gravity">center</item>
+	</style>
 
-    <style name="TimerListItemTime" parent="TimerListItemText">
+	<style name="TimerListItemTime" parent="TimerListItemText">
 
-    </style>
+	</style>
 
-    <style name="TimerListItemUnit" parent="TimerListItemText" />
+	<style name="TimerListItemUnit" parent="TimerListItemText"/>
 
-    <style name="DatePickerDialog" parent="android:Theme.Material.Dialog">
-        <item name="android:datePickerStyle">@style/DatePicker</item>
-    </style>
+	<style name="DatePickerDialog" parent="android:Theme.Material.Dialog">
+		<item name="android:datePickerStyle">@style/DatePicker</item>
+	</style>
 
-    <style name="DatePicker" parent="android:Widget.Material.DatePicker">
-        <item name="android:datePickerMode">spinner</item>
-        <item name="android:calendarViewShown">false</item>im
-    </style>
+	<style name="DatePicker" parent="android:Widget.Material.DatePicker">
+		<item name="android:datePickerMode">spinner</item>
+		<item name="android:calendarViewShown">false</item>im
+	</style>
 
-    <style name="TimePickerDialog" parent="android:Theme.Material.Dialog">
-        <item name="android:timePickerMode">@style/DateTimePicker</item>
-        <item name="android:textSize">22sp</item>
-    </style>
+	<style name="TimePickerDialog" parent="android:Theme.Material.Dialog">
+		<item name="android:timePickerMode">@style/DateTimePicker</item>
+		<item name="android:textSize">22sp</item>
+	</style>
 
-    <style name="DateTimePicker">
+	<style name="DateTimePicker">
 
-    </style>
+	</style>
 
-    <style name="AddTimerTheme.GroupHeader">
-        <item name="android:textSize">@dimen/dimen_group_header</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
-        <item name="android:textColor">@color/colorAccent</item>
-    </style>
+	<style name="TimerGroupHeader">
+		<item name="android:textSize">@dimen/dimen_group_header</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:paddingTop">10dp</item>
+		<item name="android:paddingBottom">10dp</item>
+		<item name="android:textColor">@color/colorAccent</item>
+	</style>
 
-    <style name="AddTimerTheme.GroupContent" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:drawablePadding">@dimen/dimen_group_drawable_padding</item>
-        <item name="android:textSize">@dimen/dimen_group_content</item>
-        <item name="android:layout_height">@dimen/dimen_group_input_height</item>
-        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
-        <item name="android:gravity">center_vertical</item>
-    </style>
+	<style name="TimerGroupContent">
+		<item name="android:textSize">@dimen/dimen_group_content</item>
+		<item name="android:layout_height">@dimen/dimen_group_input_height</item>
+		<item name="android:background">?attr/selectableItemBackground</item>
+		<item name="android:textAllCaps">true</item>
+		<item name="android:layout_marginStart">12dp</item>
+		<item name="android:gravity">center_vertical</item>
+	</style>
 
-    <style name="AddTimerTheme.GroupInput">
-        <item name="android:drawablePadding">@dimen/dimen_group_drawable_padding</item>
-        <item name="android:textSize">@dimen/dimen_group_input</item>
-        <item name="android:layout_height">@dimen/dimen_group_input_height</item>
-        <item name="android:gravity">center_vertical</item>
-    </style>
+	<style name="TimerGroupInput">
+		<item name="android:textSize">@dimen/dimen_group_input</item>
+		<item name="android:textColor">?android:textColor</item>
+		<item name="android:layout_height">@dimen/dimen_group_input_height</item>
+		<item name="android:layout_marginStart">12dp</item>
+		<item name="android:gravity">center_vertical</item>
+	</style>
 
-    <style name="AddTimerTheme.Meta">
-        <item name="android:textSize">@dimen/dimen_meta_content</item>
-    </style>
+	<style name="TimerMeta">
+		<item name="android:textSize">@dimen/dimen_meta_content</item>
+		<item name="android:textAllCaps">true</item>
+	</style>
 
-    <style name="AddTimerTheme.GroupButton" parent="Widget.AppCompat.Button.Borderless">
-        <item name="android:textSize">@dimen/dimen_group_header</item>
-        <item name="android:textStyle">bold</item>
-        <!--<item name="android:paddingTop">10dp</item>-->
-        <!--<item name="android:paddingBottom">10dp</item>-->
-        <item name="android:textColor">@color/colorAccent</item>
-    </style>
+	<style name="TimerGroupbutton" parent="Widget.AppCompat.Button.Borderless">
+		<item name="android:textSize">@dimen/dimen_group_header</item>
+		<item name="android:textStyle">bold</item>
+		<!--<item name="android:paddingTop">10dp</item>-->
+		<!--<item name="android:paddingBottom">10dp</item>-->
+		<item name="android:textColor">@color/colorAccent</item>
+	</style>
 
-    <style name="AddTimerTheme.ActionButton" parent="Widget.AppCompat.Button.Colored">
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingBottom">5dp</item>
-    </style>
+	<style name="TimerActionButton" parent="Widget.AppCompat.Button.Colored">
+		<item name="android:paddingTop">5dp</item>
+		<item name="android:paddingBottom">5dp</item>
+	</style>
 
-    <style name="Timer" />
+	<style name="Timer"/>
 
-    <style name="Timer.Title" parent="@style/TextAppearance.AppCompat.Large">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:layout_marginStart">10dp</item>
-        <item name="android:layout_marginEnd">10dp</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginBottom">5dp</item>
-    </style>
+	<style name="Timer.Title">
+		<item name="android:textColor">@android:color/primary_text_light</item>
+		<item name="android:maxLines">1</item>
+		<item name="android:ellipsize">end</item>
+		<item name="android:textSize">16sp</item>
+	</style>
 
-    <style name="Timer.Time" parent="TextAppearance.AppCompat.Medium">
-        <item name="android:layout_marginStart">10dp</item>
-        <item name="android:layout_marginEnd">10dp</item>
-        <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_marginBottom">5dp</item>
-        <item name="android:textColor">@color/black</item>
-    </style>
+	<style name="Timer.Time" parent="TextAppearance.AppCompat.Medium">
+		<item name="android:textColor">@android:color/secondary_text_light</item>
+		<item name="android:maxLines">1</item>
+		<item name="android:ellipsize">end</item>
+		<item name="android:textSize">16sp</item>
+	</style>
 
-    <style name="Timer.Detail" parent="TextAppearance.AppCompat.Small">
-        <item name="android:layout_marginStart">10dp</item>
-        <item name="android:layout_marginEnd">10dp</item>
-        <item name="android:layout_marginTop">5dp</item>
-        <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:textColor">@color/black</item>
-        <!--<item name="android:paddingStart">10dp</item>-->
-    </style>
+	<style name="Timer.Detail" parent="TextAppearance.AppCompat.Small">
+		<item name="android:textColor">@android:color/secondary_text_light</item>
+		<item name="android:maxLines">1</item>
+		<item name="android:ellipsize">end</item>
+		<item name="android:textSize">16sp</item>
+	</style>
 
-    <style name="Timer.Icons">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">match_parent</item>
-    </style>
+	<style name="Timer.Icons">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">match_parent</item>
+	</style>
 
-    <style name="Timer.Tag">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">10sp</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/tag</item>
-    </style>
+	<style name="waveViewStyle"/>
 
-    <style name="SearchTagsTheme.ListItem">
-        <item name="android:layout_margin">10dp</item>
-        <item name="android:paddingStart">20dp</item>
-        <item name="android:drawablePadding">20dp</item>
-        <item name="android:button">@drawable/ic_tag</item>
-        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
-    </style>
+	<style name="Timer.Tag">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textAllCaps">true</item>
+		<item name="android:gravity">center</item>
+		<item name="android:background">@drawable/tag</item>
+	</style>
 
-    <style name="Timer.Progress" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
-        <item name="android:background">@drawable/circular_progress_bar_background</item>
-        <item name="android:indeterminate">false</item>
-        <item name="android:progressDrawable">@drawable/circular_progress_bar</item>
-    </style>
+	<style name="Timer.Tag.Small" parent="Timer.Tag">
+		<item name="android:textSize">8sp</item>
+		<item name="android:textStyle">bold</item>
+	</style>
 
-    <style name="Timer.ToggleButton" parent="@style/Widget.AppCompat.Button.Borderless">
-        <item name="android:textOn" />
-        <item name="android:textOff" />
-        <item name="android:background">@drawable/toggle_background</item>
-    </style>
+	<style name="Timer.Tag.Large" parent="Timer.Tag">
+		<item name="android:textSize">14sp</item>
+	</style>
+
+	<style name="SearchTagsTheme.ListItem">
+		<item name="android:button">@null</item>
+		<item name="android:paddingStart">12dp</item>
+		<item name="android:paddingEnd">12dp</item>
+		<item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+	</style>
+
+	<style name="Timer.Progress" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+		<item name="android:background">@drawable/circular_progress_bar_background</item>
+		<item name="android:indeterminate">false</item>
+		<item name="android:progressDrawable">@drawable/circular_progress_bar</item>
+	</style>
+
+	<style name="Timer.ToggleButton" parent="@style/Widget.AppCompat.Button.Borderless">
+		<item name="android:textOn"/>
+		<item name="android:textOff"/>
+		<item name="android:background">@drawable/toggle_background</item>
+	</style>
+
+	<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+	<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+	<style name="DialogTheme" parent="@android:style/Theme.Dialog">
+		<item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+		<!--<item name="android:backgroundDimEnabled">true</item>-->
+	</style>
+
+	<style name="DialogAnimation" parent="@android:style/Animation.Activity">
+		<item name="android:windowEnterAnimation">@anim/anim_in</item>
+		<item name="android:windowExitAnimation">@anim/anim_out</item>
+	</style>
+
+	<style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
+
+	</style>
+
 </resources>

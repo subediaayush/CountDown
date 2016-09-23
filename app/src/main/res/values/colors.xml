@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#4CAF50</color>
+    <color name="colorPrimaryDark">#388E3C</color>
+    <color name="colorPrimaryLight">#C8E6C9</color>
+    <color name="colorAccent">#3e5059</color>
 
     <color name="colorCardHighlight">@color/md_yellow_100</color>
+    <color name="colorCardSelected">@color/md_blue_grey_100</color>
     <color name="colorWhiteTransparent">#0FFF</color>
 
     <color name="gray">#fCCC</color>
@@ -13,4 +15,9 @@
     <color name="black">#F000</color>
     <color name="white">#FFFF</color>
     <color name="yellow">#FFF0</color>
+    <color name="colorDeletedLayout">@color/md_red_A200</color>
+    <color name="colorTag">@color/md_grey_600</color>
+
+    <color name="progress_color_light">@color/colorPrimaryLight</color>
+    <color name="progress_color_dark">@color/colorPrimary</color>
 </resources>

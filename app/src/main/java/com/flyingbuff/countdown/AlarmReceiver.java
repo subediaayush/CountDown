@@ -45,6 +45,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         timer.stopTimer();
+        if (timer.isRepeat()) timer.startTimer();
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 
@@ -67,6 +68,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Uri tone = db.retrieveTone(timerId);
 
         timer.stopTimer();
+        if (timer.isRepeat()) timer.startTimer();
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 

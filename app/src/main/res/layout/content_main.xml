@@ -1,17 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.flyingbuff.countdown.MainActivity"
-    tools:showIn="@layout/activity_main">
+<android.support.v4.widget.NestedScrollView
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	app:layout_behavior="@string/appbar_scrolling_view_behavior"
+	tools:context=".MainActivity"
+	>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/timer_list"
-        android:overScrollMode="never"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		>
 
-</RelativeLayout>
+		<android.support.v7.widget.RecyclerView
+			android:id="@+id/timer_list"
+			android:layout_width="411dp"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/hightlight_container"
+			android:overScrollMode="never"
+			android:layout_marginTop="@dimen/padding_timer_list"
+			tools:listitem="@layout/layout_timer_list_item"
+			/>
+
+		<LinearLayout
+			android:id="@+id/empty_placeholder"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/height_first_timer"
+			android:orientation="vertical"
+			android:background="?android:attr/selectableItemBackground"
+			android:padding="10dp"
+			>
+
+			<ImageView
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="4"
+				android:scaleType="fitCenter"
+				app:srcCompat="@drawable/empty_list_placeholder"
+				/>
+
+			<com.flyingbuff.countdown.AdjustableTextView
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:fontFamily="sans-serif-light"
+				android:gravity="center_horizontal"
+				android:text="Add a timer"
+				android:textColor="@color/gray"
+				/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/hightlight_container"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			android:layout_alignParentTop="true"
+			android:animateLayoutChanges="true"
+			android:background="@color/white"
+			android:orientation="vertical"
+			>
+
+			<FrameLayout
+				android:id="@+id/highlight_timer_container"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/height_first_timer"
+				/>
+
+			<TextView
+				android:id="@+id/label_other_items"
+				style="@style/TimerGroupHeader"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:elevation="1dp"
+				android:paddingEnd="16dp"
+				android:paddingStart="16dp"
+				android:text="Other Timers"
+				/>
+
+
+		</LinearLayout>
+	</RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

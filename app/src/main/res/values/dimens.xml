@@ -1,20 +1,31 @@
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="fab_margin">25dp</dimen>
+	<!-- Default screen margins, per the Android Design guidelines. -->
+	<dimen name="activity_horizontal_margin">16dp</dimen>
+	<dimen name="activity_vertical_margin">16dp</dimen>
+	<dimen name="fab_margin">25dp</dimen>
 
-    <dimen name="size_timer_button">30dp</dimen>
-    <dimen name="timer_time">60dp</dimen>
-    <dimen name="timer_unit">15dp</dimen>
-    <dimen name="timer_spinner_input">60dp</dimen>
-    <dimen name="toolbar_text_size">20dp</dimen>
-    <dimen name="dialog_corners">4dp</dimen>
-    <dimen name="dimen_group_content">18sp</dimen>
-    <dimen name="dimen_group_header">16sp</dimen>
-    <dimen name="dimen_group_drawable_padding">12dp</dimen>
-    <dimen name="dimen_meta_content">12sp</dimen>
-    <dimen name="dimen_group_input">18sp</dimen>
-    <dimen name="dimen_group_input_height">45dp</dimen>
-    <dimen name="ic_clear_margin">12dp</dimen>
+	<dimen name="size_timer_button">30dp</dimen>
+	<dimen name="timer_time">60dp</dimen>
+	<dimen name="timer_unit">15dp</dimen>
+	<dimen name="timer_spinner_input">60dp</dimen>
+	<dimen name="toolbar_text_size">20dp</dimen>
+	<dimen name="dialog_corners">4dp</dimen>
+	<dimen name="dimen_group_content">16sp</dimen>
+	<dimen name="dimen_group_header">16sp</dimen>
+	<dimen name="dimen_group_drawable_padding">12dp</dimen>
+	<dimen name="dimen_meta_content">14sp</dimen>
+	<dimen name="dimen_group_input">18sp</dimen>
+	<dimen name="dimen_group_input_height">48dp</dimen>
+	<dimen name="ic_clear_margin">12dp</dimen>
+
+	<dimen name="height_timer_info_container">30dp</dimen>
+	<dimen name="height_seperator">1dp</dimen>
+	<dimen name="height_timer_container">88dp</dimen>
+	<dimen name="height_timer_list_item">120dp</dimen>
+	<dimen name="height_first_timer">200dp</dimen>
+	<dimen name="padding_timer_list">-120dp</dimen>
+	<dimen name="height_toolbar">56dp</dimen>
+	<dimen name="dimen_icon_height">48dp</dimen>
+	<dimen name="height_highlited_timer">250dp</dimen>
+	<dimen name="dimen_highlight_icon">24dp</dimen>
 </resources>

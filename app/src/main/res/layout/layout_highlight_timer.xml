@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:theme="@style/AddTimerTheme"
+	>
+
+	<com.flyingbuff.countdown.WaveViewPlus xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/highlight_timer_progress"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@drawable/highlight_progress_background"
+		android:clickable="true"
+		android:gravity="top"
+		android:transitionName="@string/transition_timer_bg"
+		app:above_wave_color="@color/progress_color_light"
+		app:blow_wave_color="@color/progress_color_light"
+		app:progress="0"
+		app:wave_height="middle"
+		app:wave_hz="slow"
+		app:wave_length="large"
+		/>
+
+	<RelativeLayout
+		android:id="@+id/highlight_info_container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:paddingBottom="16dp"
+		android:paddingTop="16dp"
+		>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:orientation="vertical"
+			android:paddingEnd="30dp"
+			android:paddingStart="30dp"
+			>
+
+			<TextView
+				android:id="@+id/highlight_timer_duration"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:fontFamily="sans-serif-light"
+				android:gravity="bottom|center_horizontal"
+				android:text="12 days, 12 hours"
+				android:textColor="@color/white"
+				android:textSize="30sp"
+				/>
+
+			<TextView
+				android:id="@+id/highlight_timer_name"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:fontFamily="sans-serif-light"
+				android:gravity="top|center_horizontal"
+				android:text="@string/hint_name"
+				android:textColor="@color/white"
+				android:textSize="25sp"
+				/>
+		</LinearLayout>
+
+		<ImageView
+			android:id="@+id/highlight_play_pause"
+			android:layout_width="48dp"
+			android:layout_height="@dimen/dimen_highlight_icon"
+			android:layout_alignParentStart="true"
+			android:layout_alignParentTop="true"
+			android:adjustViewBounds="true"
+			android:background="?android:attr/selectableItemBackgroundBorderless"
+			android:elevation="2dp"
+			android:paddingEnd="12dp"
+			android:paddingStart="12dp"
+			app:srcCompat="@drawable/ic_pause"
+			/>
+
+		<ImageView
+			android:id="@+id/highlight_notify"
+			android:layout_width="@dimen/dimen_highlight_icon"
+			android:layout_height="@dimen/dimen_highlight_icon"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentStart="true"
+			android:layout_marginStart="16dp"
+			android:elevation="2dp"
+			app:srcCompat="@drawable/ic_notify"
+			/>
+
+
+		<ImageView
+			android:id="@+id/highlight_tone"
+			android:layout_width="@dimen/dimen_highlight_icon"
+			android:layout_height="@dimen/dimen_highlight_icon"
+			android:layout_alignParentBottom="true"
+			android:layout_marginStart="16dp"
+			android:layout_toEndOf="@+id/highlight_notify"
+			android:elevation="2dp"
+			app:srcCompat="@drawable/ic_tone"
+			/>
+
+		<ImageView
+			android:id="@+id/highlight_repeat"
+			android:layout_width="@dimen/dimen_highlight_icon"
+			android:layout_height="@dimen/dimen_highlight_icon"
+			android:layout_alignParentBottom="true"
+			android:layout_marginStart="16dp"
+			android:layout_toEndOf="@+id/highlight_tone"
+			android:elevation="2dp"
+			app:srcCompat="@drawable/ic_repeat"
+			/>
+
+		<ImageView
+			android:id="@+id/highlight_delete"
+			android:layout_width="48dp"
+			android:layout_height="@dimen/dimen_highlight_icon"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentEnd="true"
+			android:adjustViewBounds="true"
+			android:background="?android:attr/selectableItemBackgroundBorderless"
+			android:elevation="2dp"
+			android:paddingEnd="12dp"
+			android:paddingStart="12dp"
+			app:srcCompat="@drawable/ic_delete"
+			/>
+	</RelativeLayout>
+</FrameLayout>

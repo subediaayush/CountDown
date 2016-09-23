@@ -2,8 +2,6 @@ package com.flyingbuff.countdown;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -15,84 +13,73 @@ import android.view.View;
  * Created by Aayush on 8/18/2016.
  */
 public class TimerListTouchHelperCallback extends ItemTouchHelper.SimpleCallback {
-    private final Context context;
-    Drawable background;
-    Drawable xMark;
-    int xMarkMargin;
+	private final Context context;
+	Drawable background;
+	Drawable deleteIcon;
+	int deleteIconMargin;
 
-    private TimerAdapter timerAdapter;
+	private TimerAdapter timerAdapter;
 
-    boolean isSwiping;
+	public TimerListTouchHelperCallback(Context context, TimerAdapter timerAdapter, int dragDirs, int swipeDirs) {
+		super(dragDirs, swipeDirs);
 
-    public TimerListTouchHelperCallback(Context context, TimerAdapter timerAdapter, int dragDirs, int swipeDirs) {
-        super(dragDirs, swipeDirs);
+		this.timerAdapter = timerAdapter;
 
-        this.timerAdapter = timerAdapter;
+		this.context = context;
+		background = new ColorDrawable(ContextCompat.getColor(context, R.color.colorDeletedLayout));
+		deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_trash);
+		deleteIconMargin = (int) context.getResources().getDimension(R.dimen.ic_clear_margin);
+	}
 
-        this.context = context;
-        background = new ColorDrawable(ContextCompat.getColor(context, R.color.md_red_A200));
-        xMark = ContextCompat.getDrawable(context, R.drawable.ic_delete);
-        xMark.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-        xMarkMargin = (int) context.getResources().getDimension(R.dimen.ic_clear_margin);
-    }
+	@Override
+	public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+		TimerHolder holder = (TimerHolder) viewHolder;
+		int id = (int) timerAdapter.getItemId(holder.getAdapterPosition());
 
-    @Override
-    public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        TimerHolder holder = (TimerHolder) viewHolder;
+		if (timerAdapter.removalPendingTimers.contains(id) || holder.getAdapterPosition() == 0)
+			return 0;
+		else
+			return super.getSwipeDirs(recyclerView, viewHolder);
+	}
 
-        int id = (int) timerAdapter.getItemId(holder.getAdapterPosition());
+	@Override
+	public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+		return false;
+	}
 
-        if (timerAdapter.removalPendingTimers.contains(id)) return 0;
-
-        return super.getSwipeDirs(recyclerView, viewHolder);
-    }
-
-    @Override
-    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        return false;
-    }
-
-    @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        View itemView = viewHolder.itemView;
-
-        // not sure why, but this method get's called for viewholder that are already swiped away
-        if (viewHolder.getAdapterPosition() == -1) {
-            // not interested in those
-            return;
-        }
+	@Override
+	public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
 
 
-        // draw red background
-        background.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-        background.draw(c);
+	}
 
-        // draw x mark
-        int itemHeight = itemView.getBottom() - itemView.getTop();
-        int intrinsicWidth = xMark.getIntrinsicWidth();
-        int intrinsicHeight = xMark.getIntrinsicWidth();
+	@Override
+	public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+		View itemView = viewHolder.itemView;
 
-        int xMarkLeft = itemView.getRight() - xMarkMargin - intrinsicWidth;
-        int xMarkRight = itemView.getRight() - xMarkMargin;
-        int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
-        int xMarkBottom = xMarkTop + intrinsicHeight;
-        xMark.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
+		// not sure why, but this method get's called for viewholder that are already swiped away
+		if (viewHolder.getAdapterPosition() == -1) {
+			// not interested in those
+			return;
+		}
 
-        xMark.draw(c);
+		// draw red background
+//        background.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+//        background.draw(c);
 
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-    }
+		// draw x mark
+		int itemHeight = itemView.getBottom() - itemView.getTop();
+		int intrinsicWidth = deleteIcon.getIntrinsicWidth();
+		int intrinsicHeight = deleteIcon.getIntrinsicWidth();
 
+		int deleteIconLeft = itemView.getRight() - deleteIconMargin - intrinsicWidth;
+		int deleteIconRight = itemView.getRight() - deleteIconMargin;
+		int deleteIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+		int deleteIconBottom = deleteIconTop + intrinsicHeight;
+		deleteIcon.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom);
 
-    @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
-        isSwiping = false;
+		deleteIcon.draw(c);
 
-        TimerHolder holder = (TimerHolder) viewHolder;
-//
-        int position = holder.getAdapterPosition();
-//        holder.setState(TimerHolder.TIMER_PENDING_DELETE);
-
-        if (timerAdapter != null) timerAdapter.onItemSwiped(position);
-    }
+		super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+	}
 }

@@ -26,7 +26,7 @@ public class Countdown extends Application {
     public static final String COLUMN_REMAINING = "remaining";
     public static final String COLUMN_DURATION = "duration";
     public static final String COLUMN_TIMEOUT = "timeout";
-    public static final String COLUMN_SINGLE_USE = "one_time";
+    public static final String COLUMN_REPEAT = "repeat";
     public static final String COLUMN_PAUSED = "paused";
     public static final String COLUMN_NOTIFY = "notify";
     public static final String COLUMN_SILENT = "silent";
@@ -42,10 +42,12 @@ public class Countdown extends Application {
     public static final long MILLIS_IN_DAY = MILLIS_IN_HOUR * 24;
 
     public static final String KEY_TIMER_NOTIFY = "timer_notify";
-    public static final String KEY_TIMER_AUTO_DEL = "timer_auto_delete";
-    public static final int ACTIVITY_ACTION_RINGTONE = 1000;
-    public static final int ACTIVITY_ADD_TAGS = 1001;
+    public static final String KEY_TIMER_REPEAT = "timer_auto_delete";
     public static final String KEY_TIMER_TONE = "timer_tone";
+
+    public static final int ACTIVITY_ACTION_RINGTONE = 1000;
+    public static final int ACTIVITY_TAGS = 1001;
+    public static final int ACTIVITY_TIMER_DETAIL = 1002;
 
     public static final long SECONDS_IN_HOUR = 3600;
     public static final long SECONDS_IN_MINUTE = 60;
@@ -66,6 +68,11 @@ public class Countdown extends Application {
     public static final String COLUMN_MISSED = "missed";
     public static final String KEY_MEDIA_PLAYER = "media_player";
     public static final String KEY_MUSIC_VOLUME = "media_impl";
+    public static final String KEY_TIMER_ID = "id";
+    public static final String KEY_TIMER = "timer";
+    public static final String KEY_TIMER_START = "start";
+    public static final String KEY_TIMER_EDITED = "timer_edited";
+    public static final String KEY_INITIAL_PROGRESS = "initial_progress";
 
     @Override
     public void onCreate() {

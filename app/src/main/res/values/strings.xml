@@ -1,14 +1,21 @@
 <resources>
-    <string name="app_name">Countdown</string>
-    <string name="ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
-    <string name="string_dummy_time">12:13 pm</string>
-    <string name="string_dummy_date">Jan 1, 2016</string>
-    <string name="hint_name">Name</string>
-    <string name="string_dummy_timer">10 days, 14 hours remaining</string>
-    <string name="hint_delete_after_use">Automatically delete</string>
-    <string name="hint_notify">Notify</string>
-    <string name="hint_tone">Alert tone not set</string>
-    <string name="string_dummy_name">Name of timer</string>
-    <string name="string_dummy_timer_detail">ends on 14 Apr, 2015</string>
-    <string name="action_search">Search</string>
+	<string name="app_name">Countdown</string>
+	<string name="ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+	<string name="string_dummy_time">12:13 pm</string>
+	<string name="string_dummy_date">Jan 1, 2016</string>
+	<string name="hint_name">Name</string>
+	<string name="string_dummy_timer">10 days, 14 hours remaining</string>
+	<string name="hint_repeat">Repeat</string>
+	<string name="hint_notify">Notify</string>
+	<string name="hint_tone">Alert tone not set</string>
+	<string name="string_dummy_name">Name of timer</string>
+	<string name="string_dummy_timer_detail">ends on 14 Apr, 2015</string>
+	<string name="action_search">Search</string>
+	<string name="name_progress_bar">progress_bar</string>
+	<string name="title_activity_edit_timer">EditTimerActivity</string>
+	<string name="hint_start">Saved on 4545</string>
+	<string name="hint_end">Ends on 45454</string>
+	<string name="hint_tag">Tag</string>
+	<string name="transition_hightlight_timer_background">first_timer</string>
+	<string name="transition_timer_bg">highlight_timer</string>
 </resources>
