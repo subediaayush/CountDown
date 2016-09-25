@@ -202,6 +202,7 @@ public class HighlightTimerFragment extends Fragment {
 			updatePending = true;
 			return;
 		}
+
 		timerName.setText(mTimer.getName());
 		if (mTimer.isStopped() || mTimer.isMissed()) {
 			timerDuration.setText(Timer.humanize(mTimer.getDuration()));

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -17,14 +18,36 @@
 
 		<android.support.v7.widget.Toolbar
 			android:id="@+id/toolbar"
-			android:transitionName="toolbar"
 			android:layout_width="match_parent"
 			android:layout_height="?attr/actionBarSize"
+			android:transitionName="toolbar"
 			/>
 
 	</android.support.design.widget.AppBarLayout>
 
-	<include layout="@layout/content_timer_detail"/>
+	<android.support.v4.widget.NestedScrollView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:elevation="2dp"
+		android:overScrollMode="never"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			>
+
+			<FrameLayout
+				android:id="@+id/highlight_timer_container"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/height_highlited_timer"
+				/>
+
+			<include layout="@layout/layout_timer_details"/>
+		</LinearLayout>
+	</android.support.v4.widget.NestedScrollView>
 
 	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/fab"
@@ -32,6 +55,7 @@
 		android:layout_height="wrap_content"
 		android:layout_gravity="bottom|end"
 		android:layout_margin="@dimen/fab_margin"
+		android:transitionName="fab"
 		/>
 
 </android.support.design.widget.CoordinatorLayout>

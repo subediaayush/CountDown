@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+	android:drawable="@drawable/ic_fab_edit"
+	>
+	<target
+		android:name="v"
+		android:animation="@animator/edit_save_animator"
+		/>
+</animated-vector>

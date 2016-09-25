@@ -47,7 +47,7 @@
 				android:value="com.flyingbuff.countdown.MainActivity"/>
 		</activity>
 		<activity
-			android:name=".EditTimer"
+			android:name=".EditTimerActivity"
 			android:label="@string/title_activity_edit_timer"
 			android:parentActivityName=".TimerDetailActivity"
 			android:theme="@style/AppTheme">

@@ -47,10 +47,10 @@ public class MainActivity extends AppCompatActivity {
 	int selectedItem = -1;
 
 	DatabaseHelper databaseHelper = new DatabaseHelper(this);
+	Handler uiHandler = new Handler();
 	private BroadcastReceiver alarmReceiver;
 	private TimerListTouchHelperCallback timerTouchHelperCallback;
 	private HighlightTimerFragment highlightTimer;
-	Handler uiHandler = new Handler();
 	Runnable uiRunnable = new Runnable() {
 		@Override
 		public void run() {
@@ -300,6 +300,26 @@ public class MainActivity extends AppCompatActivity {
 
 	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(AlarmReceiver.ACTION_SILENT_ALARM);
+		filter.addAction(AlarmReceiver.ACTION_NOISY_ALARM);
+
+		LocalBroadcastManager.getInstance(this)
+				.registerReceiver(alarmReceiver, filter);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		LocalBroadcastManager.getInstance(this)
+				.unregisterReceiver(alarmReceiver);
+	}
+
 	private void startDetailActivity(Timer item) {
 		Intent timerIntent = new Intent(MainActivity.this, TimerDetailActivity.class);
 		timerIntent.putExtra(Countdown.KEY_TIMER, item);
@@ -323,26 +343,6 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
-
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(AlarmReceiver.ACTION_SILENT_ALARM);
-		filter.addAction(AlarmReceiver.ACTION_NOISY_ALARM);
-
-		LocalBroadcastManager.getInstance(this)
-				.registerReceiver(alarmReceiver, filter);
-	}
-
-	@Override
-	protected void onStop() {
-		super.onStop();
-
-		LocalBroadcastManager.getInstance(this)
-				.unregisterReceiver(alarmReceiver);
-	}
-
-	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
@@ -350,19 +350,16 @@ public class MainActivity extends AppCompatActivity {
 			case Countdown.ACTIVITY_TIMER_DETAIL:
 				if (resultCode == RESULT_OK) {
 					Bundle extras = data.getExtras();
+					Timer timer = extras.getParcelable(Countdown.KEY_TIMER);
+					assert timer != null;
+					int timerPosition = timerAdapter.getPositionFromId(timer.getId());
 					if (extras.getBoolean(Countdown.KEY_TIMER_EDITED, false)) {
-						Timer timer = extras.getParcelable(Countdown.KEY_TIMER);
-						assert timer != null;
-						int timerPosition = timerAdapter.getPositionFromId(timer.getId());
 						timerAdapter.changeTimer(timer, timerPosition);
 						Log.i("Timer Adapter", "Item " + timerPosition + " notified");
+					} else if (extras.getBoolean(Countdown.KEY_TIMER_DELETED, false)) {
+						if (timerPosition != -1) timerAdapter.removeTimerAt(timerPosition);
+						Log.i("Timer Adapter", "Item " + timerPosition + " removed");
 					}
-				} else if (resultCode == RESULT_CANCELED) {
-					Bundle extras = data.getExtras();
-					Timer timer = extras.getParcelable(Countdown.KEY_TIMER);
-					int timerPosition = timerAdapter.getPositionFromId(timer.getId());
-					if (timerPosition != -1) timerAdapter.removeTimerAt(timerPosition);
-					Log.i("Timer Adapter", "Item " + timerPosition + " removed");
 				}
 		}
 	}

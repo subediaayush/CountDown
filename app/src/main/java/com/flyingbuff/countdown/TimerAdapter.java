@@ -156,7 +156,6 @@ public class TimerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		final boolean stopped = timer.isStopped();
 		boolean missed = timer.isMissed();
 
-		name += " " + position;
 		if (name.isEmpty()) holder.timerName.setVisibility(View.GONE);
 		else holder.timerName.setVisibility(View.VISIBLE);
 

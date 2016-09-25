@@ -73,16 +73,8 @@ public class Countdown extends Application {
     public static final String KEY_TIMER_START = "start";
     public static final String KEY_TIMER_EDITED = "timer_edited";
     public static final String KEY_INITIAL_PROGRESS = "initial_progress";
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        JodaTimeAndroid.init(this);
-        TimerBase.init(this);
-        AlarmHandler.init(this);
-    }
-
+    public static final int ACTIVITY_EDIT_TIMER = 1003;
+    public static final String KEY_TIMER_DELETED = "timer_deleted";
 
     public static float dpToPixel(Context context, int dp) {
         return TypedValue.applyDimension(
@@ -101,5 +93,14 @@ public class Countdown extends Application {
 
     public static long normalize(long datetime) {
         return (datetime / 1000) * 1000;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        JodaTimeAndroid.init(this);
+        TimerBase.init(this);
+        AlarmHandler.init(this);
     }
 }
